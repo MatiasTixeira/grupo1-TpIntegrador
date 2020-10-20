@@ -6,5 +6,4 @@ public class Main {
 		System.out.println("test asd ahre");
 		System.out.println("test2");
 	}
-
 }
