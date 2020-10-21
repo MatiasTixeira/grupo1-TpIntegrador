@@ -1,0 +1,14 @@
+// pagina web: yuml.me
+
+[SistemaDeEstacionamientoMedido]1 zonasDeEstacionamiento *->[ZonaDeEstacionamiento]
+[SistemaDeEstacionamientoMedido]1 compras *->[Compra]
+
+[ZonaDeEstacionamiento]1 puntosDeVenta *->[PuntoDeVenta]
+[ZonaDeEstacionamiento]1 inspector 1->[Inspector]
+[ZonaDeEstacionamiento]1 ubicacionGeografica 1->[<<interface>>;UbicacionGeografica]
+[UbicacionGeografica]^-.-[Poligono]
+
+[Compra]^[RecargaDeCelular]
+[Compra]^[CompraPuntual]
+
+[SistemaDeEstacionamientoMedido|+ registrarZonaDeEstacionamiento(ZonaDeEstacionamiento): void;+ registrarCompra(Compra)]
