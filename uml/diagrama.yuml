@@ -1,14 +1,45 @@
 // pagina web: yuml.me
 
-[SistemaDeEstacionamientoMedido]1 zonasDeEstacionamiento *->[ZonaDeEstacionamiento]
-[SistemaDeEstacionamientoMedido]1 compras *->[Compra]
+[SistemaDeEstacionamientoMedido]1 ZonaDeEstacionamiento *->[ZonaDeEstacionamiento]
+[SistemaDeEstacionamientoMedido]1 compras *->[_Compra_]
+[SistemaDeEstacionamientoMedido] 1 estacionamiento * ->[_Estacionamiento_]
 
 [ZonaDeEstacionamiento]1 puntosDeVenta *->[PuntoDeVenta]
 [ZonaDeEstacionamiento]1 inspector 1->[Inspector]
 [ZonaDeEstacionamiento]1 ubicacionGeografica 1->[<<interface>>;UbicacionGeografica]
 [UbicacionGeografica]^-.-[Poligono]
 
-[Compra]^[RecargaDeCelular]
-[Compra]^[CompraPuntual]
+[_Compra_]* puntoDeVenta 1->[PuntoDeVenta]
+[EstacionamientoPuntual]* estacionemiento 1->[_Compra_]
+// ---------------------------------------
 
-[SistemaDeEstacionamientoMedido|+ registrarZonaDeEstacionamiento(ZonaDeEstacionamiento): void;+ registrarCompra(Compra)]
+[_Compra_]^[RecargaDeCelular]
+[_Compra_]^[CompraPuntual]
+
+[_Estacionamiento_]^[EstacionamientoApp]
+[_Estacionamiento_]^[EstacionamientoPuntual]
+
+//----------------------------------------
+
+[SistemaDeEstacionamientoMedido|-  horaInicio:LocalDate;-horaFinal:LocalDate; - costoPorHora: double|+ registrarZonaDeEstacionamiento(ZonaDeEstacionamiento): void;+ registrarCompra(Compra); registrarEstacionamiento(Estacionamiento)]
+
+[PuntoDeVenta| + ComenzarEstacionamiento(String,double); cargarCredito(String, double)]
+
+[_Compra_| - numeroDControl : Int; - fecha: LocalDate ; - hora: LocalTime]
+
+[RecargaDeCelular| - monto:Doule ; numCelular: String]
+
+[CompraPuntual| - cantDeHorasCompradas :Doule]
+
+[_Estacionamiento_| - horaInicio : LocalTime; - horaFin : LocalTime; - patente: String | + estaVigente() Boolean]
+
+[EstacionamientoApp| - numCelular : String]
+
+[EstacionamientoPuntual| - horasCompradas: double ]
+
+
+
+
+
+
+
