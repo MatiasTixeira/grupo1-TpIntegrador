@@ -1,45 +1,83 @@
 // pagina web: yuml.me
 
-[SistemaDeEstacionamientoMedido]1 ZonaDeEstacionamiento *->[ZonaDeEstacionamiento]
-[SistemaDeEstacionamientoMedido]1 compras *->[_Compra_]
-[SistemaDeEstacionamientoMedido] 1 estacionamiento * ->[_Estacionamiento_]
+//------------------------------------
+// Compra
 
+// Relaciones
+[_Compra_]* puntoDeVenta 1->[PuntoDeVenta]
+
+// Estructura
+[_Compra_| - numeroDControl : Int; - fecha: LocalDate ; - hora: LocalTime]
+
+//------------------------------------
+// CompraPuntual
+
+// Relaciones
+[_Compra_]^[CompraPuntual]
+
+// Estructura
+[CompraPuntual| - cantDeHorasCompradas :Doule]
+
+//------------------------------------
+// Estacionamiento
+
+// Estructura
+[_Estacionamiento_| - horaInicio : LocalTime; - horaFin : LocalTime; - patente: String | + estaVigente() Boolean]
+
+//------------------------------------
+// EstacionamientoApp
+
+// Relaciones
+[_Estacionamiento_]^[EstacionamientoApp]
+
+// Estructura
+[EstacionamientoApp| - numCelular : String]
+
+//------------------------------------
+// EstacionamientoPuntual
+
+// Relaciones
+[_Estacionamiento_]^[EstacionamientoPuntual]
+[EstacionamientoPuntual]* estacionemiento 1->[_Compra_]
+
+// Estructura
+[EstacionamientoPuntual| - horasCompradas: double ]
+
+//------------------------------------
+// PuntoDeVenta
+
+// Estructura
+[PuntoDeVenta| + ComenzarEstacionamiento(String,double); cargarCredito(String
+double)]
+
+//------------------------------------
+// RecargaDeCelular
+
+// Relaciones
+[_Compra_]^[RecargaDeCelular]
+
+// Estructura
+[RecargaDeCelular| - monto:Doule ; numCelular: String]
+
+//------------------------------------
+// SistemaDeEstacionamientoMedido
+
+// Relaciones
+[SistemaDeEstacionamientoMedido]1 zonaDeEstacionamiento *->[ZonaDeEstacionamiento]
+[SistemaDeEstacionamientoMedido]1 compras *->[_Compra_]
+[SistemaDeEstacionamientoMedido]1 estacionamiento * ->[_Estacionamiento_]
+
+// Estructura
+[SistemaDeEstacionamientoMedido|-  horaInicio:LocalDate;-horaFinal:LocalDate; - costoPorHora: double|+ registrarZonaDeEstacionamiento(ZonaDeEstacionamiento): void;+ registrarCompra(Compra); registrarEstacionamiento(Estacionamiento)]
+
+
+//------------------------------------
+// ZonaDeEstacionamiento
+
+// Relaciones
 [ZonaDeEstacionamiento]1 puntosDeVenta *->[PuntoDeVenta]
 [ZonaDeEstacionamiento]1 inspector 1->[Inspector]
 [ZonaDeEstacionamiento]1 ubicacionGeografica 1->[<<interface>>;UbicacionGeografica]
 [UbicacionGeografica]^-.-[Poligono]
 
-[_Compra_]* puntoDeVenta 1->[PuntoDeVenta]
-[EstacionamientoPuntual]* estacionemiento 1->[_Compra_]
 // ---------------------------------------
-
-[_Compra_]^[RecargaDeCelular]
-[_Compra_]^[CompraPuntual]
-
-[_Estacionamiento_]^[EstacionamientoApp]
-[_Estacionamiento_]^[EstacionamientoPuntual]
-
-//----------------------------------------
-
-[SistemaDeEstacionamientoMedido|-  horaInicio:LocalDate;-horaFinal:LocalDate; - costoPorHora: double|+ registrarZonaDeEstacionamiento(ZonaDeEstacionamiento): void;+ registrarCompra(Compra); registrarEstacionamiento(Estacionamiento)]
-
-[PuntoDeVenta| + ComenzarEstacionamiento(String,double); cargarCredito(String, double)]
-
-[_Compra_| - numeroDControl : Int; - fecha: LocalDate ; - hora: LocalTime]
-
-[RecargaDeCelular| - monto:Doule ; numCelular: String]
-
-[CompraPuntual| - cantDeHorasCompradas :Doule]
-
-[_Estacionamiento_| - horaInicio : LocalTime; - horaFin : LocalTime; - patente: String | + estaVigente() Boolean]
-
-[EstacionamientoApp| - numCelular : String]
-
-[EstacionamientoPuntual| - horasCompradas: double ]
-
-
-
-
-
-
-
