@@ -47,8 +47,8 @@
 // PuntoDeVenta
 
 // Estructura
-[PuntoDeVenta| + ComenzarEstacionamiento(String,double); cargarCredito(String
-double)]
+[PuntoDeVenta| + PuntoDeVenta(SistemaDeEstacionamientoMedido):void ; + comenzarEstacionamiento(String,double): void ; cargarCredito(String
+double): void ]
 
 //------------------------------------
 // RecargaDeCelular
