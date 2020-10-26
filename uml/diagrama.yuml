@@ -1,4 +1,8 @@
-// pagina web: yuml.me
+//------------------------------------
+// AppEstacionamiento
+
+// Estructura
+[AppEstacionamiento]* server 1->[IServerEst]
 
 //------------------------------------
 // Compra
@@ -7,22 +11,31 @@
 [_Compra_]* puntoDeVenta 1->[PuntoDeVenta]
 
 // Estructura
-[_Compra_| - numeroDControl : Int; - fecha: LocalDate ; - hora: LocalTime]
+[_Compra_|- numeroDeControl : int;- fecha: LocalDate;- hora: LocalTime|+ Compra(PuntoDeVenta, LocalDate, LocalTime);+ setNumeroDeControl(int): void]
 
 //------------------------------------
-// CompraPuntual
+// CompraEstPuntual
 
 // Relaciones
-[_Compra_]^[CompraPuntual]
+[_Compra_]^[CompraEstPuntual]
 
 // Estructura
-[CompraPuntual| - cantDeHorasCompradas :Doule]
+[CompraEstPuntual|- cantHoras: double|+ CompraEstPuntual(PuntoDeVenta, LocalDate, LocalTime, double)]
+
+//------------------------------------
+// CompraRecarga
+
+// Relaciones
+[_Compra_]^[CompraRecarga]
+
+// Estructura
+[CompraRecarga|- monto: double;- nroCelular: String|+ CompraEstPuntual(PuntoDeVenta, LocalDate, LocalTime, double, String)]
 
 //------------------------------------
 // Estacionamiento
 
 // Estructura
-[_Estacionamiento_| - horaInicio : LocalTime; - horaFin : LocalTime; - patente: String | + estaVigente() Boolean]
+[_Estacionamiento_|- horaInicio: LocalTime;- horaFin: LocalTime;- patente: String|+ Estacionamiento(String, LocalTime, LocalTime);+ _estaVigente(): boolean_]
 
 //------------------------------------
 // EstacionamientoApp
@@ -31,19 +44,128 @@
 [_Estacionamiento_]^[EstacionamientoApp]
 
 // Estructura
-[EstacionamientoApp| - numCelular : String]
+[EstacionamientoApp|- nroCelular: String|+ EstacionamientoApp(String, LocalTime, LocalTime, String);+ estaVigente(): boolean]
 
 //------------------------------------
 // EstacionamientoPuntual
 
 // Relaciones
 [_Estacionamiento_]^[EstacionamientoPuntual]
-[EstacionamientoPuntual]* estacionemiento 1->[_Compra_]
+[EstacionamientoPuntual]* compra 1->[_Compra_]
 
 // Estructura
-[EstacionamientoPuntual| - horasCompradas: double ]
+[EstacionamientoPuntual|- horasCompradas: double|+ EstacionamientoPuntual(String, LocalTime, LocalTime, Compra);+ estaVigente(): boolean]
 
 //------------------------------------
+// GestorCompras
+
+// Relaciones
+[IRegistroCompra]^-.-[GestorCompras]
+[SectorCompras]^[GestorCompras]
+
+//------------------------------------
+// GestorEstacionamientos
+
+// Relaciones
+[GestorEstacionamientos]* informanteDeSaldo 1->[IConsultaSaldo]
+[IRegistroEstacionamiento]^-.-[GestorEstacionamientos]
+[IServerEst]^-.-[GestorEstacionamientos]
+[SectorEstacionamientos]^[GestorEstacionamientos]
+
+//------------------------------------
+// GestorRecargas
+
+// Relaciones
+[SectorRecargas]^[GestorRecargas]
+[IRegistroRecarga]^-.-[GestorRecargas]
+[IConsultaSaldo]^-.-[GestorRecargas]
+
+//------------------------------------
+// IConsultaSaldo
+
+// Relaciones
+
+// Estructura
+[<<interface>>;IConsultaSaldo|+ saldo(String): double]
+
+//------------------------------------
+// IRegistroCompra
+
+// Relaciones
+
+// Estructura
+[<<interface>>;IRegistroCompra|+ registrar(Compra): Compra]
+
+//------------------------------------
+// IRegistroEstacionamiento
+
+// Relaciones
+
+// Estructura
+[<<interface>>;IRegistroEstacionamiento|+ registrar(Estacionamiento)]
+
+//------------------------------------
+// IRegistroRecarga
+
+// Relaciones
+
+// Estructura
+[<<interface>>;IRegistroRecarga|+ registrar(String, double)]
+
+//------------------------------------
+// IServerEst
+
+// Estructura
+[<<interface>>;IServerEst|+ iniciarEst(String, String): void;+ finalizarEst(String): void;+ saldo(String): double]
+
+//------------------------------------
+// PuntoDeVenta
+
+// Relaciones
+[PuntoDeVenta]* registradorCompras 1->[IRegistroCompra]
+[PuntoDeVenta]* registradorEstacionamientos 1->[IRegistroEstacionamiento]
+[PuntoDeVenta]* registradorRecargas 1->[IRegistroRecarga]
+
+// Estructura
+[PuntoDeVenta|+ PuntoDeVenta(IRegistroCompra, IRegistroEstacionamiento, IRegistroRecarga);+ comprarEstacionamiento(String, double): void;+ comprarRecarga(String, double): void]
+
+//------------------------------------
+// SectorCompras
+
+// Relaciones
+[SectorCompras]* compras 1->[_Compra_]
+
+// Estructura
+[SectorCompras|+ getCompras(): List\<Compra\>]
+
+//------------------------------------
+// SectorEstacionamientos
+
+// Relaciones
+[SectorEstacionamientos]* estacionamientos 1->[_Estacionamiento_]
+
+// Estructura
+[SectorEstacionamientos|+ getEstacionamientos(): List\<Estacionamiento\>]
+
+//------------------------------------
+// SectorRecargas
+
+// Estructura
+[SectorRecargas|+ getRecargas(): List\<Recarga\>]
+
+//------------------------------------
+// SistemaDeEstacionamientoMedido
+
+// Relaciones
+[SistemaDeEstacionamientoMedido]1 sectorCompras 1->[SectorCompras]
+[SistemaDeEstacionamientoMedido]1 sectorCompras 1->[SectorEstacionamientos]
+[SistemaDeEstacionamientoMedido]1 sectorRecargas 1->[SectorRecargas]
+
+// Estructura
+[SistemaDeEstacionamientoMedido]
+
+// ---------------------------------------
+
 // PuntoDeVenta
 
 // Estructura
