@@ -21,8 +21,8 @@ class CompraPuntualTestCase {
 	@Test
 	void testSetNumeroDeControl() {
 		compraPuntual.setNumeroDeControl(1000);
-
 		assertEquals(1000, compraPuntual.getNumeroDeControl());
 	}
 
 }
+ 
