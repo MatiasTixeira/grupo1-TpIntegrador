@@ -10,6 +10,10 @@ public class CompraPuntual extends Compra {
 		this.setCantidadDeHoras(cantidadDeHoras);
 	}
 
+	public Integer getCantidadDeHoras() {
+		return cantidadDeHoras;
+	}
+
 	private void setCantidadDeHoras(Integer cantidadDeHoras) {
 		this.cantidadDeHoras = cantidadDeHoras;
 	}
