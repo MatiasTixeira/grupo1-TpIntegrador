@@ -1,5 +1,7 @@
 package appInspector;
 
+import sectorDeEstacionamiento.IControlDeEstacionamiento;
+
 public class AppInspector {
 
 	//Atributos 
@@ -31,7 +33,7 @@ public class AppInspector {
 	}
 
 	public Boolean tieneEstacionamientoVigente(String patente) {
-		return this.getControlE().estaVigente(patente);
+		return this.getControlE().tieneEstacionamientoVigente(patente);
 	}
 	
 	public void registrarInfraccion(String patente, String zona) {

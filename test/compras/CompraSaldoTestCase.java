@@ -15,7 +15,7 @@ class CompraSaldoTestCase {
 	public void setUp() {
 		PuntoDeVenta puntoDeVenta = mock(PuntoDeVenta.class);
 
-		compraSaldo = new CompraSaldo(puntoDeVenta, Double.valueOf(350), "03-03-456");
+		compraSaldo = new CompraSaldo(puntoDeVenta, 350d, "03-03-456");
 	}
 
 	@Test

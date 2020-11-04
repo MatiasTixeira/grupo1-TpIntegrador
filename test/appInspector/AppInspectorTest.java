@@ -6,28 +6,26 @@ import static org.mockito.Mockito.mock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import appInspector.IControlDeEstacionamiento;
 import appInspector.IRegistroDeInfraccion;
 import appInspector.Infraccion;
+import sectorDeEstacionamiento.IControlDeEstacionamiento;
 
 class AppInspectorTest {
 	IControlDeEstacionamiento controlEstacionamiento;
 	IRegistroDeInfraccion controlInfraccion;
 	AppInspector aplicacion;
 	String patente;
-	Infraccion i;
 	String zona;
 	
 	@BeforeEach
 	public void setUp() {
 		this.controlEstacionamiento = mock(IControlDeEstacionamiento.class);
 		this.controlInfraccion = mock(IRegistroDeInfraccion.class);
-		this.i = mock(Infraccion.class);
 		this.patente = "ABC123";
 		this.zona = "Bernal";
 		String nombre = "juan";
 		this.aplicacion = new AppInspector(this.controlEstacionamiento,nombre,this.controlInfraccion);
-		when(controlEstacionamiento.estaVigente(this.patente)).thenReturn(true);
+		when(controlEstacionamiento.tieneEstacionamientoVigente(this.patente)).thenReturn(true);
 	}
 	
 	@Test

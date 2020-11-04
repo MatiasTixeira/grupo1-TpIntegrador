@@ -8,11 +8,16 @@ public class SectorDeCompras implements ISectorDeCompras {
 	private ArrayList<Compra> compras;
 	
 	public SectorDeCompras() {
-		compras = new ArrayList<Compra>();
+		this.setCompras(new ArrayList<Compra>());
 	}
+	
+	public void setCompras(ArrayList<Compra> compras) {
+		this.compras = compras;
+	}
+	
 	@Override
 	public void registrar(Compra compra) {
-		this.compras.add(compra);
+		this.getCompras().add(compra);
 		
 	}
 
