@@ -1,7 +1,6 @@
 package sectorDeZonas;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -13,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import espacioGeografico.Ubicacion;
 import espacioGeografico.UbicacionGeografica;
-import puntosDeVenta.PuntoDeVenta;
+import puntoDeVenta.PuntoDeVenta;
 
 class ZonaDeEstacionamientoTest {
 	ZonaDeEstacionamiento zonaE;

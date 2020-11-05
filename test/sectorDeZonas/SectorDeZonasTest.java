@@ -1,25 +1,18 @@
 package sectorDeZonas;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+
 
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import appInspector.Infraccion;
 import espacioGeografico.Ubicacion;
 import espacioGeografico.UbicacionGeografica;
-import estacionamiento.Estacionamiento;
-import puntosDeVenta.PuntoDeVenta;
-import sectorDeSaldos.sectorDeSaldo;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 

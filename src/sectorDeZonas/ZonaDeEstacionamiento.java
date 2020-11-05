@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import espacioGeografico.Ubicacion;
 import espacioGeografico.UbicacionGeografica;
-import puntosDeVenta.PuntoDeVenta;
+import puntoDeVenta.PuntoDeVenta;
 
 public class ZonaDeEstacionamiento{
 	
