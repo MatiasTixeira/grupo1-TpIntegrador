@@ -1,6 +1,7 @@
 package sectorDeEstacionamiento;
 import java.time.LocalTime;
 import java.util.ArrayList;
+
 import estacionamiento.Estacionamiento;
 
 public interface ISectorDeEstacionamiento extends IControlDeEstacionamiento{
@@ -8,5 +9,5 @@ public interface ISectorDeEstacionamiento extends IControlDeEstacionamiento{
 	public void setHoraInicio(LocalTime horaInicio);
 	public void setHoraFin(LocalTime horaFin);
 	public void setPrecioPorHora(Double precioPorHora);
-	
+
 }

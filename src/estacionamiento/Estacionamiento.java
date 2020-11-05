@@ -1,31 +1,49 @@
 package estacionamiento;
 
-import compras.Compra;
+import java.time.LocalTime;
 
-public class Estacionamiento {
-
-	public boolean estaVigente() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+public abstract class Estacionamiento {
+	protected String patente;
+	protected LocalTime horaInicio;
+	protected LocalTime horaFin;
 
 	public String getPatente() {
-		// TODO Auto-generated method stub
-		return null;
+		return patente;
 	}
 
-	public String getNumeroCelular() {
-		// TODO Auto-generated method stub
-		return null;
+	protected void setPatente(String patente) {
+		this.patente = patente;
 	}
 
-	public Estacionamiento(Compra c, Double horasCompradas, String patente) {
-		
+	protected LocalTime getHoraInicio() {
+		return horaInicio;
 	}
 
-	public void finalizar() {
-		// TODO Auto-generated method stub
-		
+	protected void setHoraInicio(LocalTime horaInicio) {
+		this.horaInicio = horaInicio;
 	}
 
+	protected LocalTime getHoraFin() {
+		return horaFin;
+	}
+
+	public void setHoraFin(LocalTime horaFin) {
+		this.horaFin = horaFin;
+	}
+
+	public Estacionamiento(
+			String patente,
+			LocalTime horaInicio,
+			LocalTime horaFin) {
+
+		this.setHoraFin(horaFin);
+		this.setHoraInicio(horaInicio);
+		this.setPatente(patente);
+	}
+
+	public Boolean estaVigente() {
+		return LocalTime.now().isBefore(this.getHoraFin());
+	}
+
+	public abstract String getNumeroCelular();
 }

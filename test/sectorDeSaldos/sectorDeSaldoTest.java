@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 
 class sectorDeSaldoTest {
-	sectorDeSaldo sectorDeSaldo;
+	SectorDeSaldo sectorDeSaldo;
 	Map<String, Double> creditoCelulares;
 	
 	@BeforeEach
@@ -22,7 +22,7 @@ class sectorDeSaldoTest {
 		creditoCelulares.put("223344", 555d);
 		creditoCelulares.put("334455", 650d);
 		creditoCelulares.put("556677", 5d);
-	    sectorDeSaldo = new sectorDeSaldo(creditoCelulares);
+	    sectorDeSaldo = new SectorDeSaldo(creditoCelulares);
 	}
 	
 	@Test

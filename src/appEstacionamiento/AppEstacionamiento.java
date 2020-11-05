@@ -3,13 +3,37 @@ package appEstacionamiento;
 import appEstacionamiento.estadoDeMoviemiento.EstadoDeMovimiento;
 import appEstacionamiento.modoDeActivacion.ModoDeActivacion;
 import appEstacionamiento.modoDeAlerta.ModoDeAlerta;
+import espacioGeografico.GPS;
+import espacioGeografico.Ubicacion;
+import respuestas.Respuesta;
 import serverEstacionamiento.IServerEstacionamientoApp;
 
 public class AppEstacionamiento implements MovementSensor {
+	private String nroCelular;
+	private String patente;
 	private EstadoDeMovimiento estadoDeMovimiento;
 	private ModoDeAlerta modoDeAlerta;
 	private ModoDeActivacion modoDeActivacion;
 	private IServerEstacionamientoApp server;
+	private Ubicacion ultimaUbicacionDeEstacionamiento;
+	private GPS gps;
+	private GUI gui;
+
+	public String getNroCelular() {
+		return this.nroCelular;
+	}
+
+	public void setNroCelular(String nroCelular) {
+		this.nroCelular = nroCelular;
+	}
+
+	public String getPatente() {
+		return this.patente;
+	}
+
+	public void setPatente(String patente) {
+		this.patente = patente;
+	}
 
 	public void setEstadoDeMovimiento(EstadoDeMovimiento estadoDeMovimiento) {
 		this.estadoDeMovimiento = estadoDeMovimiento;
@@ -35,6 +59,22 @@ public class AppEstacionamiento implements MovementSensor {
 		this.modoDeActivacion = modoDeActivacion;
 	}
 
+	public IServerEstacionamientoApp getServer() {
+		return server;
+	}
+
+	public void setServer(IServerEstacionamientoApp server) {
+		this.server = server;
+	}
+
+	public GUI getGui() {
+		return this.gui;
+	}
+
+	public void setGui(GUI gui) {
+		this.gui = gui;
+	}
+
 	@Override
 	public void driving() {
 		this.getEstadoDeMovimiento().isDriving();
@@ -46,7 +86,9 @@ public class AppEstacionamiento implements MovementSensor {
 	}
 
 	public void iniciarEstacionamiento() {
-		//server.iniciarEstacionamiento()
+		Respuesta respuesta = this.getServer().iniciarEstacionamiento(
+				this.getNroCelular(), this.getPatente());
+
 	}
 
 	public void comenzoACaminar() {
