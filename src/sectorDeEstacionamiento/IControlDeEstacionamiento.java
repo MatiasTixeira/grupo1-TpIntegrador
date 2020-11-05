@@ -10,7 +10,7 @@ public interface IControlDeEstacionamiento {
 	public Estacionamiento estacionamientoVigente(String num);
 	public  void finalizarTodosLosEstacionamientos();
 	public Boolean esHorarioDeEstacionamiento();
-	public LocalTime getHorarioDeFinalizacion();
+	public LocalTime getHoraFin();
 	public Double getPrecioPorHora();
 
 }

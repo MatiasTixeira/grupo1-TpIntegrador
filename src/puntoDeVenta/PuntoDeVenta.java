@@ -31,16 +31,19 @@ public class PuntoDeVenta {
 	}
 
 	public void comprarEstacionamiento(String patente, Integer cantHoras) {
-		CompraPuntual compra = new CompraPuntual(this,cantHoras);
-
-		LocalTime horaMaxima = this.getControlEst().getHorarioDeFinalizacion();
-		LocalTime horaDebitable = horaMaxima.plusHours(cantHoras);
-		LocalTime horaFin = horaDebitable.isAfter(horaMaxima)
+		
+		LocalTime horaMaxima = this.getControlEst().getHoraFin();
+		LocalTime horaDebitable = horaMaxima.plusHours((long)cantHoras);
+		LocalTime horaFin = horaDebitable.isAfter(horaMaxima) 
 						? horaMaxima
 						: horaDebitable;
-
+		LocalTime horaActual = LocalTime.now();
+		Integer horasCompradas = Math.max(1,horaFin.getHour() - horaActual.getHour());
+		CompraPuntual compra = new CompraPuntual(this,horasCompradas);
+		this.getControlCom().registrar(compra);
+		
 		EstacionamientoPuntual est = new EstacionamientoPuntual(
-				patente, LocalTime.now(), horaFin, compra);
+				patente, horaActual, horaFin, compra);
 		this.getControlEst().registrarEstacionamiento(est);
 	}
 

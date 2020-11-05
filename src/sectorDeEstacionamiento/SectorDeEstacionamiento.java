@@ -104,11 +104,6 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 
 	}
 
-	@Override
-	public LocalTime getHorarioDeFinalizacion() {
-		// TODO Auto-generated method stub
-		return this.horaFin;
-	}
 
 	@Override
 	public Double getPrecioPorHora() {
