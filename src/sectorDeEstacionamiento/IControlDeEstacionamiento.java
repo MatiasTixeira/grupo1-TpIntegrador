@@ -11,7 +11,7 @@ public interface IControlDeEstacionamiento {
 	public  void finalizarTodosLosEstacionamientos();
 	public Boolean esHorarioDeEstacionamiento();
 	public LocalTime getHorarioDeFinalizacion();
-	public Integer getPrecioPorHora();
+	public Double getPrecioPorHora();
 
 }
 

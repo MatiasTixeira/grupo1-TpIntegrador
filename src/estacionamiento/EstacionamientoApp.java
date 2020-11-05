@@ -19,10 +19,22 @@ public class EstacionamientoApp extends Estacionamiento {
 	private void setNumeroCelular(String nroCelular) {
 		this.numeroCelular = nroCelular;
 	}
+	@Override 
+	public void finalizar() {
+		this.setEstaActivo(false);
+		
+	}
+	public String getPatente() {
+		return patente;
+	}
+
+	public void setPatente(String patente) {
+		this.patente = patente;
+	}
 
 	@Override
 	public String getNumeroCelular() {
-		// TODO Auto-generated method stub
+		
 		return numeroCelular;
 	}
 

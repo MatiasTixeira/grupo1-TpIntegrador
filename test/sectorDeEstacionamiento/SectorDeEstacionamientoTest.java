@@ -1,5 +1,5 @@
 package sectorDeEstacionamiento;
-import static org.junit.Assert.assertEquals;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -13,6 +13,8 @@ import java.time.LocalTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import estacionamiento.Estacionamiento;
+import estacionamiento.EstacionamientoApp;
 import estacionamiento.EstacionamientoPuntual;
 
 class SectorDeEstacionamientoTest {
@@ -27,7 +29,7 @@ class SectorDeEstacionamientoTest {
 	@Test
 	void testConstructor() {
 		assertEquals(0,sectorDeEstacionamiento.getEstacionamientos().size());
-		assertEquals(40, sectorDeEstacionamiento.getPrecioPorHora());
+		assertEquals(40d, sectorDeEstacionamiento.getPrecioPorHora());
 	}
 	@Test
 	void registrarEstacionamientoTest() {
@@ -55,7 +57,7 @@ class SectorDeEstacionamientoTest {
 	}
 	@Test
 	void retornoDeEstacionamientoVigenteBuscadoPorElNumeroCelular(){
-		EstacionamientoPuntual estacionamiento = mock(EstacionamientoPuntual.class);
+		EstacionamientoApp estacionamiento = mock(EstacionamientoApp.class);
 		when(estacionamiento.estaVigente()).thenReturn(true);
 		when(estacionamiento.getNumeroCelular()).thenReturn("03-03-456");
 
@@ -65,7 +67,7 @@ class SectorDeEstacionamientoTest {
 	}
 	@Test
 	void cuandoSefinalizanTodosLosEstacionamientosNoEstanMasVigentes() {
-		EstacionamientoPuntual estacionamiento = mock(EstacionamientoPuntual.class);
+		EstacionamientoApp estacionamiento = mock(EstacionamientoApp.class);
 		when(estacionamiento.estaVigente()).thenReturn(true);
 		when(estacionamiento.getPatente()).thenReturn("11AA");
 		EstacionamientoPuntual estacionamiento2 = mock(EstacionamientoPuntual.class);

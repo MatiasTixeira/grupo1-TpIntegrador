@@ -3,9 +3,21 @@ package estacionamiento;
 import java.time.LocalTime;
 
 public abstract class Estacionamiento {
-	protected String patente;
-	protected LocalTime horaInicio;
-	protected LocalTime horaFin;
+	private  String patente;
+	private  LocalTime horaInicio;
+	private  LocalTime horaFin;
+	private Boolean estaActivo;
+	
+	public Estacionamiento(
+			String patente,
+			LocalTime horaInicio,
+			LocalTime horaFin) {
+
+		this.setHoraFin(horaFin);
+		this.setHoraInicio(horaInicio);
+		this.setPatente(patente);
+		this.setEstaActivo(true);
+	}
 
 	public String getPatente() {
 		return patente;
@@ -31,19 +43,18 @@ public abstract class Estacionamiento {
 		this.horaFin = horaFin;
 	}
 
-	public Estacionamiento(
-			String patente,
-			LocalTime horaInicio,
-			LocalTime horaFin) {
-
-		this.setHoraFin(horaFin);
-		this.setHoraInicio(horaInicio);
-		this.setPatente(patente);
-	}
 
 	public Boolean estaVigente() {
-		return LocalTime.now().isBefore(this.getHoraFin());
+		Boolean estaVigente = LocalTime.now().isBefore(this.getHoraFin()) 
+				&& this.estaActivo;
+		return estaVigente ;
 	}
+	public abstract void finalizar();
+		
 
 	public abstract String getNumeroCelular();
+	
+	public void setEstaActivo(Boolean estaActivo) {
+		this.estaActivo = estaActivo;
+	}
 }
