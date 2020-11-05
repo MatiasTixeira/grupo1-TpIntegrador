@@ -3,7 +3,7 @@ package compras;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import puntosDeVenta.PuntoDeVenta;
+import puntoDeVenta.PuntoDeVenta;
 
 public abstract class Compra {
 	private LocalDate fecha;
@@ -14,7 +14,7 @@ public abstract class Compra {
 	public Compra(PuntoDeVenta puntoDeVenta) {
 		this.setFecha(LocalDate.now());
 		this.setHora(LocalTime.now());
-		this.setPuntoDeVenta(puntoDeVenta);
+		this.setPuntoDeVenta(puntoDeVenta);		
 	}
 
 	private void setFecha(LocalDate fecha) {

@@ -1,6 +1,6 @@
 package compras;
 
-import puntosDeVenta.PuntoDeVenta;
+import puntoDeVenta.PuntoDeVenta;
 
 public class CompraSaldo extends Compra {
 	private Double monto;

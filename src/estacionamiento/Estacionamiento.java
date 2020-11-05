@@ -1,5 +1,7 @@
 package estacionamiento;
 
+import compras.Compra;
+
 public class Estacionamiento {
 
 	public boolean estaVigente() {
@@ -17,7 +19,9 @@ public class Estacionamiento {
 		return null;
 	}
 
-	
+	public Estacionamiento(Compra c, Double horasCompradas, String patente) {
+		
+	}
 
 	public void finalizar() {
 		// TODO Auto-generated method stub

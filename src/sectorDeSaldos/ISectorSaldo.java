@@ -4,5 +4,5 @@ import java.util.Map;
 
 public interface ISectorSaldo extends IControlSaldo {
 
-	public Map<String, Integer> getSaldos();
+	public Map<String, Double> getSaldos();
 }
