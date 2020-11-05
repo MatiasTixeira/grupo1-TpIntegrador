@@ -3,6 +3,9 @@ package puntoDeVenta;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +29,7 @@ class PuntoDeVentaTest {
 		this.regis = mock(IRegistroCompras.class);
 		this.ctrlSal = mock(IControlSaldo.class);
 		this.punto = new PuntoDeVenta(ctrlSal,ctrlEst,regis);
-	}
+	} 
 
 	@Test
 	void cuandoQuierenComprarCreditoEnUnPuntoDeVentaSeCargaElSaldoYSeRegistraLaCompra() {
@@ -37,7 +40,8 @@ class PuntoDeVentaTest {
 
 	@Test
 	void cuandoQuierenComprarUnEstacionamientoEnUnPuntoDeVentaSeRegistraLaCompraYElEstacionamiento() {
-		this.punto.comprarEstacionamiento("112233", 15);
+		when(ctrlEst.getHoraFin()).thenReturn(LocalTime.of(20, 0));
+		this.punto.comprarEstacionamiento("112233", 20);
 		verify(this.regis).registrar( any(CompraPuntual.class) );
 		verify(this.ctrlEst).registrarEstacionamiento(any(EstacionamientoPuntual.class));
 	}

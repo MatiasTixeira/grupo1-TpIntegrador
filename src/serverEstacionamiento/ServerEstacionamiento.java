@@ -8,7 +8,7 @@ import respuestas.RespuestaInicioEstacionamiento;
 import respuestas.RespuestaSinSaldo;
 import sectorDeEstacionamiento.IControlDeEstacionamiento;
 import sectorDeSaldos.IControlSaldo;
-
+ 
 public class ServerEstacionamiento implements IServerEstacionamientoApp {
 	private IControlDeEstacionamiento controlEstacionamiento;
 	private IControlSaldo controlSaldo;
@@ -35,9 +35,9 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 			return new RespuestaSinSaldo();
 		} else {
 			LocalTime horaInicio = LocalTime.now();
-			LocalTime horaMaxima = this.getControlEstacionamiento().getHorarioDeFinalizacion();
-			Integer precioPorHora = this.getControlEstacionamiento().getPrecioPorHora();
-			Integer precioPorSegundo = precioPorHora / 3600;
+			LocalTime horaMaxima = this.getControlEstacionamiento().getHoraFin();
+			Double precioPorHora = this.getControlEstacionamiento().getPrecioPorHora();
+			Double precioPorSegundo = precioPorHora / 3600;
 			Integer segundosDebitables =
 					(int) (this.getControlSaldo().saldo(nroCelular) / precioPorSegundo);
 			LocalTime horaDebitable = horaInicio.plusSeconds(segundosDebitables);

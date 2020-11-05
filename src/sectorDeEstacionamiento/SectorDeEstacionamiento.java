@@ -55,7 +55,7 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 	@Override
 	public void finalizarTodosLosEstacionamientos() {
 		for (Estacionamiento estacionamiento : this.getEstacionamientos()) {
-			estacionamiento.setHoraFin(LocalTime.now());
+			estacionamiento.finalizar();
 		}
 
 	}
@@ -104,16 +104,11 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 
 	}
 
-	@Override
-	public LocalTime getHorarioDeFinalizacion() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
-	public Integer getPrecioPorHora() {
-		// TODO Auto-generated method stub
-		return null;
+	public Double getPrecioPorHora() {
+		
+		return this.precioPorHora;
 	}
 
 }
