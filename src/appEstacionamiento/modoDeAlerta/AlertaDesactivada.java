@@ -3,15 +3,9 @@ package appEstacionamiento.modoDeAlerta;
 public class AlertaDesactivada implements ModoDeAlerta {
 
 	@Override
-	public void comenzoACaminar() {
-		// TODO Auto-generated method stub
-
-	}
+	public void comenzoACaminar() {}
 
 	@Override
-	public void comenzoAManejar() {
-		// TODO Auto-generated method stub
-
-	}
+	public void comenzoAManejar() {}
 
 }

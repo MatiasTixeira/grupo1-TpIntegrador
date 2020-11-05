@@ -15,7 +15,7 @@ class CompraPuntualTestCase {
 	public void setUp() {
 		PuntoDeVenta puntoDeVenta = mock(PuntoDeVenta.class);
 
-		this.compraPuntual = new CompraPuntual(puntoDeVenta, 4d);
+		this.compraPuntual = new CompraPuntual(puntoDeVenta, 4);
 	}
 
 	@Test
@@ -25,4 +25,3 @@ class CompraPuntualTestCase {
 	}
 
 }
- 

@@ -2,18 +2,16 @@ package sectorDeEstacionamiento;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import estacionamiento.Estacionamiento;
 
 public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
-	
+
 	private ArrayList<Estacionamiento> estacionamientos;
 	private LocalTime horaInicio;
 	private LocalTime horaFin;
 	private Double precioPorHora;
-	
+
 	public SectorDeEstacionamiento(LocalTime horaInicio, LocalTime horaFin, Double precioPorHora) {
 		this.setHoraFin(horaFin);
 		this.setHoraInicio(horaInicio);
@@ -23,19 +21,19 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 
 	private void setEstacionamientos(ArrayList<Estacionamiento> estacionamientos) {
 		this.estacionamientos = estacionamientos;
-		
+
 	}
 
 	@Override
 	public void registrarEstacionamiento(Estacionamiento estacionamiento) {
-		this.getEstacionamientos().add(estacionamiento);	
+		this.getEstacionamientos().add(estacionamiento);
 	}
 
 	@Override
 	public Boolean tieneEstacionamientoVigente(String patente) {
 		Boolean estaVigente = this.getEstacionamientos()
 				.stream()
-				.anyMatch(estacionamiento -> 
+				.anyMatch(estacionamiento ->
 						estacionamiento.getPatente().equals(patente) &&
 						estacionamiento.estaVigente());
 		return estaVigente;
@@ -57,18 +55,18 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 	@Override
 	public void finalizarTodosLosEstacionamientos() {
 		for (Estacionamiento estacionamiento : this.getEstacionamientos()) {
-			estacionamiento.finalizar();
+			estacionamiento.setHoraFin(LocalTime.now());
 		}
-		
+
 	}
 
 	@Override
 	public Boolean esHorarioDeEstacionamiento() {
 
-		Boolean esHorarioDeEstacionamiento = 
+		Boolean esHorarioDeEstacionamiento =
 				horaActual().isAfter(this.getHoraInicio()) &&
 				horaActual().isBefore(this.getHoraFin());
-				
+
 		return esHorarioDeEstacionamiento;
 	}
 	public LocalTime horaActual() {
@@ -83,10 +81,6 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 		return horaFin;
 	}
 
-	public Double getPrecioPorHora() {
-		return precioPorHora;
-	}
-
 	@Override
 	public ArrayList<Estacionamiento> getEstacionamientos() {
 
@@ -95,19 +89,31 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 
 	@Override
 	public void setHoraInicio(LocalTime horaInicio) {
-		this.horaInicio = horaInicio;	
+		this.horaInicio = horaInicio;
 	}
 
 	@Override
 	public void setHoraFin(LocalTime horaFin) {
 		this.horaFin = horaFin;
-		
+
 	}
 
 	@Override
 	public void setPrecioPorHora(Double precioPorHora) {
 		this.precioPorHora = precioPorHora;
-		
+
+	}
+
+	@Override
+	public LocalTime getHorarioDeFinalizacion() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer getPrecioPorHora() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

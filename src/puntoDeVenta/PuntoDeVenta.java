@@ -1,20 +1,21 @@
 package puntoDeVenta;
 
-import compras.Compra;
+import java.time.LocalTime;
+
 import compras.CompraPuntual;
 import compras.CompraSaldo;
-import estacionamiento.Estacionamiento;
+import estacionamiento.EstacionamientoPuntual;
 import sectorDeCompras.IRegistroCompras;
 import sectorDeEstacionamiento.IControlDeEstacionamiento;
 import sectorDeSaldos.IControlSaldo;
 
 public class PuntoDeVenta {
 
-	//atributos 
+	//atributos
 	IControlSaldo controlSal;
 	IControlDeEstacionamiento controlEst;
 	IRegistroCompras controlCom;
-	
+
 	//constructor
 	public PuntoDeVenta(IControlSaldo controlSal,IControlDeEstacionamiento controlEst,IRegistroCompras controlCom) {
 		this.setControlCom(controlCom);
@@ -28,14 +29,21 @@ public class PuntoDeVenta {
 		this.getControlCom().registrar(compra);
 		this.getControlSal().cargarSaldo(num, monto);
 	}
-	
-	public void comprarEstacionamiento(String patente, Double cantHoras) {
+
+	public void comprarEstacionamiento(String patente, Integer cantHoras) {
 		CompraPuntual compra = new CompraPuntual(this,cantHoras);
-		Compra c2 = this.getControlCom().registrar(compra);
-		Estacionamiento est = new Estacionamiento(c2,cantHoras,patente);
+
+		LocalTime horaMaxima = this.getControlEst().getHorarioDeFinalizacion();
+		LocalTime horaDebitable = horaMaxima.plusHours(cantHoras);
+		LocalTime horaFin = horaDebitable.isAfter(horaMaxima)
+						? horaMaxima
+						: horaDebitable;
+
+		EstacionamientoPuntual est = new EstacionamientoPuntual(
+				patente, LocalTime.now(), horaFin, compra);
 		this.getControlEst().registrarEstacionamiento(est);
 	}
-	
+
 	public IControlSaldo getControlSal() {
 		return controlSal;
 	}
