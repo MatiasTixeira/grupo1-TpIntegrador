@@ -1,9 +1,8 @@
 package puntoDeVenta;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.time.LocalTime;
 
@@ -49,9 +48,8 @@ class PuntoDeVentaTest {
 	@Test
 	void cuandoQuiereComprarUnEstaionamientoPor20HsSoloDejaUnaCantidadExacta() {
 		when(ctrlEst.getHoraFin()).thenReturn(LocalTime.of(20, 0));
-		this.punto.comprarEstacionamiento("112233", 15);
-		CompraPuntual compra = new CompraPuntual(punto,11);
-		verify(this.regis).registrar(compra);
+		Integer respuestaEsperada = ctrlEst.getHoraFin().getHour() - LocalTime.now().getHour();
+		assertEquals(respuestaEsperada, this.punto.comprarEstacionamiento("112233", 20));
 	}
 
 }
