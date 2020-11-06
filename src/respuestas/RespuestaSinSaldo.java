@@ -6,4 +6,9 @@ public class RespuestaSinSaldo implements Respuesta {
 	public String respuestaComoString() {
 		return "Saldo insuficiente. Estacionamiento no permitido.";
 	}
+
+	@Override
+	public Boolean operacionExitosa() {
+		return false;
+	}
 }

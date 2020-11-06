@@ -1,8 +1,10 @@
 package appEstacionamiento.modoDeAlerta;
 
+import appEstacionamiento.GUI;
+
 public interface ModoDeAlerta {
 
-	public void comenzoACaminar();
+	public void comenzoACaminar(GUI gui);
 
-	public void comenzoAManejar();
+	public void comenzoAManejar(GUI gui);
 }

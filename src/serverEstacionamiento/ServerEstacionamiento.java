@@ -2,16 +2,23 @@ package serverEstacionamiento;
 
 import java.time.LocalTime;
 
+import espacioGeografico.Ubicacion;
+import estacionamiento.Estacionamiento;
 import estacionamiento.EstacionamientoApp;
 import respuestas.Respuesta;
+import respuestas.RespuestaFinEstacionamiento;
 import respuestas.RespuestaInicioEstacionamiento;
+import respuestas.RespuestaNoTieneEstacionamientoVigente;
 import respuestas.RespuestaSinSaldo;
+import respuestas.RespuestaYaTieneEstacionamientoVigente;
 import sectorDeEstacionamiento.IControlDeEstacionamiento;
 import sectorDeSaldos.IControlSaldo;
- 
+import sectorDeZonas.IControlZonas;
+
 public class ServerEstacionamiento implements IServerEstacionamientoApp {
 	private IControlDeEstacionamiento controlEstacionamiento;
 	private IControlSaldo controlSaldo;
+	private IControlZonas controlZonas;
 
 	public IControlDeEstacionamiento getControlEstacionamiento() {
 		return this.controlEstacionamiento;
@@ -29,17 +36,29 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 		this.controlSaldo = controlSaldo;
 	}
 
+	public IControlZonas getControlZonas() {
+		return this.controlZonas;
+	}
+
 	@Override
 	public Respuesta iniciarEstacionamiento(String nroCelular, String patente) {
+		Respuesta res;
+
 		if (this.getControlSaldo().saldo(nroCelular) <= 0) {
-			return new RespuestaSinSaldo();
+
+			res = new RespuestaSinSaldo();
+
 		} else {
+
 			LocalTime horaInicio = LocalTime.now();
 			LocalTime horaMaxima = this.getControlEstacionamiento().getHoraFin();
-			Double precioPorHora = this.getControlEstacionamiento().getPrecioPorHora();
-			Double precioPorSegundo = precioPorHora / 3600;
+			Double precioPorSegundo = this.getControlEstacionamiento().getPrecioPorHora() / 3600;
 			Integer segundosDebitables =
-					(int) (this.getControlSaldo().saldo(nroCelular) / precioPorSegundo);
+				Math.min(
+					LocalTime.of(23, 59, 59).toSecondOfDay() - horaInicio.toSecondOfDay(),
+					(int) (this.getControlSaldo().saldo(nroCelular) / precioPorSegundo));
+
+
 			LocalTime horaDebitable = horaInicio.plusSeconds(segundosDebitables);
 			LocalTime horaFin = horaDebitable.isBefore(horaMaxima)
 					? horaDebitable
@@ -49,7 +68,37 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 					new EstacionamientoApp(patente, horaInicio, horaFin, nroCelular)
 			);
 
-			return new RespuestaInicioEstacionamiento(horaInicio, horaFin);
+			res = new RespuestaInicioEstacionamiento(horaInicio, horaFin);
 		}
+
+		return res;
+	}
+
+	@Override
+	public Respuesta finalizarEstacionamiento(String nroCelular) {
+
+		Estacionamiento estacionamiento = this.getControlEstacionamiento().estacionamientoVigente(nroCelular)
+		estacionamiento.finalizar();
+
+		LocalTime horaInicio = estacionamiento.getHoraInicio();
+		LocalTime horaFin = estacionamiento.getHoraFin();
+
+		Integer segundosCobrados = horaFin.toSecondOfDay() - horaInicio.toSecondOfDay();
+		Double precioPorSegundo = this.getControlEstacionamiento().getPrecioPorHora() / 3600;
+
+		Integer cantHoras = horaFin.getHour() - horaInicio.getHour();
+		Double costo = segundosCobrados * precioPorSegundo;
+
+		return new RespuestaFinEstacionamiento(horaInicio, horaFin, cantHoras, costo);;
+	}
+
+	@Override
+	public Boolean estaEnZonaDeEstacionamiento(Ubicacion ubicacion) {
+		return this.getControlZonas().perteneceAUnaZonaDeEstacionamiento(ubicacion);
+	}
+
+	@Override
+	public Boolean tieneEstacionamientoVigente(String patente) {
+		return this.getControlEstacionamiento().tieneEstacionamientoVigente(patente);
 	}
 }

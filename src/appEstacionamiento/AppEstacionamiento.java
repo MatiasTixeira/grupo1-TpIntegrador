@@ -15,7 +15,7 @@ public class AppEstacionamiento implements MovementSensor {
 	private ModoDeAlerta modoDeAlerta;
 	private ModoDeActivacion modoDeActivacion;
 	private IServerEstacionamientoApp server;
-	private Ubicacion ultimaUbicacionDeEstacionamiento;
+	private Ubicacion ultimaUbicacionEst;
 	private GPS gps;
 	private GUI gui;
 
@@ -67,6 +67,14 @@ public class AppEstacionamiento implements MovementSensor {
 		this.server = server;
 	}
 
+	public Ubicacion getUltimaUbicacionEst() {
+		return ultimaUbicacionEst;
+	}
+
+	public void setUltimaUbicacionEst(Ubicacion ultimaUbicacionEst) {
+		this.ultimaUbicacionEst = ultimaUbicacionEst;
+	}
+
 	public GUI getGui() {
 		return this.gui;
 	}
@@ -89,16 +97,59 @@ public class AppEstacionamiento implements MovementSensor {
 		Respuesta respuesta = this.getServer().iniciarEstacionamiento(
 				this.getNroCelular(), this.getPatente());
 
+		this.setUltimaUbicacionEst(this.getGps().ubicacionActual());
+		this.getGui().print(respuesta.respuestaComoString());
+	}
+
+	public void finalizarEstacionamiento() {
+		Respuesta respuesta = this.getServer().finalizarEstacionamiento(
+				this.getNroCelular());
+
+		this.getGui().print(respuesta.respuestaComoString());
 	}
 
 	public void comenzoACaminar() {
-		this.getModoDeAlerta().comenzoACaminar();
-		this.getModoDeActivacion().comenzoACaminar();
+
+		if (!tieneEstacionamientoVigente() &&
+				this.estaEnZonaEstacionamiento()) {
+
+			this.getModoDeAlerta().comenzoACaminar(this.getGui());
+
+			this.getModoDeActivacion().comenzoACaminar(
+					this.getServer(),
+					this.getPatente(),
+					this.getNroCelular(),
+					this.getGui());
+		}
 	}
 
 	public void comenzoAManejar() {
-		this.getModoDeAlerta().comenzoAManejar();
-		this.getModoDeActivacion().comenzoAManejar();
+
+		if (this.tieneEstacionamientoVigente() &&
+				this.ubicacionActual().equals(this.getUltimaUbicacionEst())) {
+
+			this.getModoDeAlerta().comenzoAManejar(this.getGui());
+
+			this.getModoDeActivacion().comenzoAManejar(
+					this.getServer(),
+					this.getNroCelular(),
+					this.getGui());
+		}
 	}
 
+	private Boolean estaEnZonaEstacionamiento() {
+		return this.getServer().estaEnZonaDeEstacionamiento(this.ubicacionActual());
+	}
+
+	public Ubicacion ubicacionActual() {
+		return this.getGps().ubicacionActual();
+	}
+
+	private Boolean tieneEstacionamientoVigente() {
+		return this.getServer().tieneEstacionamientoVigente(this.getPatente());
+	}
+
+	public GPS getGps() {
+		return this.gps;
+	}
 }

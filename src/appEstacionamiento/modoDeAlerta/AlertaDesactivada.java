@@ -1,11 +1,13 @@
 package appEstacionamiento.modoDeAlerta;
 
+import appEstacionamiento.GUI;
+
 public class AlertaDesactivada implements ModoDeAlerta {
 
 	@Override
-	public void comenzoACaminar() {}
+	public void comenzoACaminar(GUI gui) {}
 
 	@Override
-	public void comenzoAManejar() {}
+	public void comenzoAManejar(GUI gui) {}
 
 }
