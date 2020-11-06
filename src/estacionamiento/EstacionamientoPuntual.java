@@ -25,15 +25,14 @@ public class EstacionamientoPuntual extends Estacionamiento {
 	public void setCompra(CompraPuntual compra) {
 		this.compra = compra;
 	}
+	public boolean esSuCelular(String celular) {
+		return false;
+	}
 	@Override
 	public void finalizar() {
 		this.setEstaActivo(false);
 		
 	}
 
-	@Override
-	public String getNumeroCelular() {
-		return "";
-	}
 
 }
