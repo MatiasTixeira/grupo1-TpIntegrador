@@ -17,7 +17,10 @@ public class PuntoDeVenta {
 	IRegistroCompras controlCom;
 
 	//constructor
-	public PuntoDeVenta(IControlSaldo controlSal,IControlDeEstacionamiento controlEst,IRegistroCompras controlCom) {
+	public PuntoDeVenta(
+			IControlSaldo controlSal,
+			IControlDeEstacionamiento controlEst,
+			IRegistroCompras controlCom) {
 		this.setControlCom(controlCom);
 		this.setControlEst(controlEst);
 		this.setControlSal(controlSal);
@@ -30,7 +33,7 @@ public class PuntoDeVenta {
 		this.getControlSal().cargarSaldo(num, monto);
 	}
 
-	public void comprarEstacionamiento(String patente, Integer cantHoras) {
+	public Integer comprarEstacionamiento(String patente, Integer cantHoras) {
 
 		LocalTime horaActual = LocalTime.now();
 		LocalTime horaMaxima = this.getControlEst().getHoraFin();
@@ -46,6 +49,7 @@ public class PuntoDeVenta {
 		EstacionamientoPuntual est = new EstacionamientoPuntual(
 				patente, horaActual, horaFin, compra);
 		this.getControlEst().registrarEstacionamiento(est);
+		return horasCompradas;
 	}
 
 	public IControlSaldo getControlSal() {
