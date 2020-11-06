@@ -42,10 +42,10 @@ class SectorDeEstacionamientoTest {
 		assertEquals(2,sectorDeEstacionamiento.getEstacionamientos().size());
 	}
 	@Test
-	void cuandoSeCompruebaLaVigenciaDeDeEstacionamientoDeUnaPatente() {
+	void cuandoSeCompruebaLaVigenciaDeEstacionamientoDeUnaPatente() {
 		EstacionamientoPuntual estacionamiento = mock(EstacionamientoPuntual.class);
 		when(estacionamiento.estaVigente()).thenReturn(true,false);
-		when(estacionamiento.getPatente()).thenReturn("11AA");
+		when(estacionamiento.esSuPatente("11AA")).thenReturn(true);
 		//No hay estacionamiento registrado con esa patente
 		assertFalse(sectorDeEstacionamiento.tieneEstacionamientoVigente("11AA"));
 		//El estacionamiento esta registrado con esa patente y esta vigente
@@ -59,7 +59,7 @@ class SectorDeEstacionamientoTest {
 	void retornoDeEstacionamientoVigenteBuscadoPorElNumeroCelular(){
 		EstacionamientoApp estacionamiento = mock(EstacionamientoApp.class);
 		when(estacionamiento.estaVigente()).thenReturn(true);
-		when(estacionamiento.getNumeroCelular()).thenReturn("03-03-456");
+		when(estacionamiento.esSuCelular("03-03-456")).thenReturn(true);
 
 		sectorDeEstacionamiento.registrarEstacionamiento(estacionamiento);
 		assertEquals(estacionamiento,sectorDeEstacionamiento.estacionamientoVigente("03-03-456"));
@@ -69,10 +69,10 @@ class SectorDeEstacionamientoTest {
 	void cuandoSefinalizanTodosLosEstacionamientosNoEstanMasVigentes() {
 		EstacionamientoApp estacionamiento = mock(EstacionamientoApp.class);
 		when(estacionamiento.estaVigente()).thenReturn(true);
-		when(estacionamiento.getPatente()).thenReturn("11AA");
+		when(estacionamiento.esSuPatente("11AA")).thenReturn(true);
 		EstacionamientoPuntual estacionamiento2 = mock(EstacionamientoPuntual.class);
 		when(estacionamiento2.estaVigente()).thenReturn(true);
-		when(estacionamiento2.getPatente()).thenReturn("22BB");
+		when(estacionamiento2.esSuPatente("22BB")).thenReturn(true);
 		//agrego los estacionamientos vigentes
 		sectorDeEstacionamiento.registrarEstacionamiento(estacionamiento);
 		sectorDeEstacionamiento.registrarEstacionamiento(estacionamiento2);
