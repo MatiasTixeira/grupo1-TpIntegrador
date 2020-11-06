@@ -1,7 +1,10 @@
 package appEstacionamiento;
 
+import appEstacionamiento.estadoDeMoviemiento.Caminando;
 import appEstacionamiento.estadoDeMoviemiento.EstadoDeMovimiento;
 import appEstacionamiento.modoDeActivacion.ModoDeActivacion;
+import appEstacionamiento.modoDeActivacion.ModoManual;
+import appEstacionamiento.modoDeAlerta.AlertaDesactivada;
 import appEstacionamiento.modoDeAlerta.ModoDeAlerta;
 import espacioGeografico.GPS;
 import espacioGeografico.Ubicacion;
@@ -18,6 +21,23 @@ public class AppEstacionamiento implements MovementSensor {
 	private Ubicacion ultimaUbicacionEst;
 	private GPS gps;
 	private GUI gui;
+
+	public AppEstacionamiento(
+			String nroCelular,
+			String patente,
+			IServerEstacionamientoApp server,
+			GPS gps,
+			GUI gui) {
+
+		this.setModoDeAlerta(new AlertaDesactivada());
+		this.setModoDeActivacion(new ModoManual());
+		this.setEstadoDeMovimiento(new Caminando(this));
+		this.setNroCelular(nroCelular);
+		this.setPatente(patente);
+		this.setServer(server);
+		this.setGps(gps);
+		this.setGui(gui);
+	}
 
 	public String getNroCelular() {
 		return this.nroCelular;
@@ -47,7 +67,7 @@ public class AppEstacionamiento implements MovementSensor {
 		return this.modoDeAlerta;
 	}
 
-	private void setModoDeAlerta(ModoDeAlerta modoDeAlerta) {
+	public void setModoDeAlerta(ModoDeAlerta modoDeAlerta) {
 		this.modoDeAlerta = modoDeAlerta;
 	}
 
@@ -55,7 +75,7 @@ public class AppEstacionamiento implements MovementSensor {
 		return this.modoDeActivacion;
 	}
 
-	private void setModoDeActivacion(ModoDeActivacion modoDeActivacion) {
+	public void setModoDeActivacion(ModoDeActivacion modoDeActivacion) {
 		this.modoDeActivacion = modoDeActivacion;
 	}
 
@@ -81,6 +101,14 @@ public class AppEstacionamiento implements MovementSensor {
 
 	public void setGui(GUI gui) {
 		this.gui = gui;
+	}
+
+	public GPS getGps() {
+		return this.gps;
+	}
+
+	public void setGps(GPS gps) {
+		this.gps = gps;
 	}
 
 	@Override
@@ -141,7 +169,7 @@ public class AppEstacionamiento implements MovementSensor {
 		return this.getServer().estaEnZonaDeEstacionamiento(this.ubicacionActual());
 	}
 
-	public Ubicacion ubicacionActual() {
+	private Ubicacion ubicacionActual() {
 		return this.getGps().ubicacionActual();
 	}
 
@@ -149,7 +177,4 @@ public class AppEstacionamiento implements MovementSensor {
 		return this.getServer().tieneEstacionamientoVigente(this.getPatente());
 	}
 
-	public GPS getGps() {
-		return this.gps;
-	}
 }

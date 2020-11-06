@@ -8,9 +8,7 @@ import estacionamiento.EstacionamientoApp;
 import respuestas.Respuesta;
 import respuestas.RespuestaFinEstacionamiento;
 import respuestas.RespuestaInicioEstacionamiento;
-import respuestas.RespuestaNoTieneEstacionamientoVigente;
 import respuestas.RespuestaSinSaldo;
-import respuestas.RespuestaYaTieneEstacionamientoVigente;
 import sectorDeEstacionamiento.IControlDeEstacionamiento;
 import sectorDeSaldos.IControlSaldo;
 import sectorDeZonas.IControlZonas;
@@ -77,7 +75,7 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 	@Override
 	public Respuesta finalizarEstacionamiento(String nroCelular) {
 
-		Estacionamiento estacionamiento = this.getControlEstacionamiento().estacionamientoVigente(nroCelular)
+		Estacionamiento estacionamiento = this.getControlEstacionamiento().estacionamientoVigente(nroCelular);
 		estacionamiento.finalizar();
 
 		LocalTime horaInicio = estacionamiento.getHoraInicio();
