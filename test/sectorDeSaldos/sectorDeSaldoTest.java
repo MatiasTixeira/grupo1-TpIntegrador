@@ -51,4 +51,11 @@ class sectorDeSaldoTest {
 	void elSaldoDelCelular334455EsDe650() {
 		assertEquals(650, sectorDeSaldo.saldo("334455"));
 	}
+	
+	
+	@Test
+	void elSaldoDelCelularQueNoEstaRegistradoEs0() {
+		//test caso borde
+		assertEquals(0, sectorDeSaldo.saldo("998877"));
+	}
 }

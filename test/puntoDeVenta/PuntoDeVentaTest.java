@@ -45,4 +45,5 @@ class PuntoDeVentaTest {
 		verify(this.regis).registrar( any(CompraPuntual.class) );
 		verify(this.ctrlEst).registrarEstacionamiento(any(EstacionamientoPuntual.class));
 	}
+	
 }

@@ -24,27 +24,23 @@ class SectorDeZonasTest {
 	@BeforeEach
 	public void setUp() {
 	zona = mock(ZonaDeEstacionamiento.class);
+	sectorZona = new SectorDeZonas();
+	sectorZona.registrar(zona);
 	}
 	
 	@Test
 	void cuandoTenemosUnaZonaEstaSePuedeRegistrarEnElSectorDeZonas(){
-		sectorZona = new SectorDeZonas();
-		sectorZona.registrar(zona);
 		assertEquals(1,sectorZona.getZonas().size());
 	}
 	
 	@Test
 	void cuandoUnaUbicacionPerteneceAUnaZonaEstaRetornaTrue() {
-		sectorZona = new SectorDeZonas();
-		sectorZona.registrar(zona);
 		when(zona.contiene(any(Ubicacion.class))).thenReturn(true);
 		assertEquals(true,sectorZona.perteneceAUnaZonaDeEstacionamiento(mock(Ubicacion.class)));
 	}
 
 	@Test
-	void cuandoUnaUbicacionNoPerteneceAUnaZonaEstaRetornaTrue() {
-		sectorZona = new SectorDeZonas();
-		sectorZona.registrar(zona);
+	void cuandoUnaUbicacionNoPerteneceAUnaZonaEstaRetornaFalse() {
 		when(zona.contiene(any(Ubicacion.class))).thenReturn(false);
 		assertEquals(false,sectorZona.perteneceAUnaZonaDeEstacionamiento(mock(Ubicacion.class)));
 	}
