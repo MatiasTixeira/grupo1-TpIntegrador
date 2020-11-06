@@ -12,31 +12,31 @@ import suscripcion.IGestorDeSuscripcion;
 
 public class SistemaDeEstacionamientoMedido {
 	
-		LocalTime horaInicio; 
-		LocalTime horaFin; 
-		Double precioPorHora;
-		ISectorDeEstacionamiento sectorEstacionamiento; 
-		ISectorSaldo sectorSsaldol;
-		ISectorZonas sectorZona; 
-		ISectorDeCompras sectorCompra;
-		ISectorDeInfracciones sectorInfraccion;
-		IGestorDeSuscripcion sectorSuscripcion;
+		private LocalTime horaInicio; 
+		private LocalTime horaFin; 
+		private Double precioPorHora;
+		private ISectorDeEstacionamiento sectorEstacionamiento; 
+		private ISectorSaldo sectorSaldo;
+		private ISectorZonas sectorZona; 
+		private ISectorDeCompras sectorCompra;
+		private ISectorDeInfracciones sectorInfraccion;
+		private IGestorDeSuscripcion sectorSuscripcion;
 		
 
 		public SistemaDeEstacionamientoMedido(LocalTime horaInicio, LocalTime horaFin, Double precioPorHora,
-				ISectorDeEstacionamiento sectorEstacionamiento, ISectorSaldo sectorSsaldol, ISectorZonas sectorZona,
+				ISectorDeEstacionamiento sectorEstacionamiento, ISectorSaldo sectorSaldo, ISectorZonas sectorZona,
 				ISectorDeCompras sectorCompra, ISectorDeInfracciones sectorInfraccion,
 				IGestorDeSuscripcion sectorSuscripcion) {
 			super();
-			this.horaInicio = horaInicio;
-			this.horaFin = horaFin;
-			this.precioPorHora = precioPorHora;
-			this.sectorEstacionamiento = sectorEstacionamiento;
-			this.sectorSsaldol = sectorSsaldol;
-			this.sectorZona = sectorZona;
-			this.sectorCompra = sectorCompra;
-			this.sectorInfraccion = sectorInfraccion;
-			this.sectorSuscripcion = sectorSuscripcion;
+			this.setHoraInicio(horaInicio);
+			this.setHoraFin(horaFin);
+			this.setPrecioPorHora(precioPorHora);
+			this.setSectorEstacionamiento(sectorEstacionamiento);
+			this.setSectorSsaldol(sectorSaldo);
+			this.setSectorZona(sectorZona);
+			this.setSectorCompra(sectorCompra);
+			this.setSectorInfraccion(sectorInfraccion);
+			this.setSectorSuscripcion(sectorSuscripcion);
 		}
 		
 		public LocalTime getHoraInicio() {
@@ -63,11 +63,11 @@ public class SistemaDeEstacionamientoMedido {
 		public void setSectorEstacionamiento(ISectorDeEstacionamiento sectorEstacionamiento) {
 			this.sectorEstacionamiento = sectorEstacionamiento;
 		}
-		public ISectorSaldo getSectorSsaldol() {
-			return sectorSsaldol;
+		public ISectorSaldo getSectorSaldo() {
+			return sectorSaldo;
 		}
 		public void setSectorSsaldol(ISectorSaldo sectorSsaldol) {
-			this.sectorSsaldol = sectorSsaldol;
+			this.sectorSaldo = sectorSsaldol;
 		}
 		public ISectorZonas getSectorZona() {
 			return sectorZona;
