@@ -4,7 +4,7 @@ import appEstacionamiento.AppEstacionamiento;
 
 public class Manejando extends EstadoDeMovimiento {
 
-	protected Manejando(AppEstacionamiento app) {
+	public Manejando(AppEstacionamiento app) {
 		super(app);
 	}
 
