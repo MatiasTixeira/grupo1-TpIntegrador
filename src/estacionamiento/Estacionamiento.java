@@ -8,6 +8,7 @@ public abstract class Estacionamiento {
 	private  LocalTime horaFin;
 	private Boolean estaActivo;
 	
+	
 	public Estacionamiento(
 			String patente,
 			LocalTime horaInicio,
@@ -18,10 +19,17 @@ public abstract class Estacionamiento {
 		this.setPatente(patente);
 		this.setEstaActivo(true);
 	}
+	
+	
 
 	public String getPatente() {
 		return patente;
 	}
+	public boolean esSuPatente(String patente) {
+		return this.getPatente().equals(patente);
+	}
+	
+	public  abstract boolean esSuCelular(String celular);
 
 	protected void setPatente(String patente) {
 		this.patente = patente;
@@ -52,8 +60,6 @@ public abstract class Estacionamiento {
 	public abstract void finalizar();
 		
 
-	public abstract String getNumeroCelular();
-	
 	public void setEstaActivo(Boolean estaActivo) {
 		this.estaActivo = estaActivo;
 	}

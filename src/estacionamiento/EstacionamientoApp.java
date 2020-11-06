@@ -3,9 +3,8 @@ package estacionamiento;
 import java.time.LocalTime;
 
 public class EstacionamientoApp extends Estacionamiento {
-	private String patente;
 	private String numeroCelular;
-
+	
 	public EstacionamientoApp (
 			String patente,
 			LocalTime horaInicio,
@@ -15,27 +14,21 @@ public class EstacionamientoApp extends Estacionamiento {
 		super(patente, horaInicio, horaFin);
 		this.setNumeroCelular(nroCelular);
 	}
-
-	private void setNumeroCelular(String nroCelular) {
+	public boolean esSuCelular(String celular) {
+		return this.getNumeroCelular().equals(celular);
+	}
+	public void setNumeroCelular(String nroCelular) {
 		this.numeroCelular = nroCelular;
 	}
+	public String getNumeroCelular() {
+		return this.numeroCelular;
+	}
+	
 	@Override 
 	public void finalizar() {
 		this.setEstaActivo(false);
 		
 	}
-	public String getPatente() {
-		return patente;
-	}
-
-	public void setPatente(String patente) {
-		this.patente = patente;
-	}
-
-	@Override
-	public String getNumeroCelular() {
-		
-		return numeroCelular;
-	}
+	
 
 }

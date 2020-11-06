@@ -34,7 +34,7 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 		Boolean estaVigente = this.getEstacionamientos()
 				.stream()
 				.anyMatch(estacionamiento ->
-						estacionamiento.getPatente().equals(patente) &&
+						estacionamiento.esSuPatente(patente) &&
 						estacionamiento.estaVigente());
 		return estaVigente;
 	}
@@ -45,7 +45,7 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 		//debe de estar vigente.
 		Estacionamiento estacionamiento = this.getEstacionamientos()
 				.stream()
-				.filter(e -> e.getNumeroCelular().equals(numCelular) &&
+				.filter(e -> e.esSuCelular(numCelular) &&
 							 e.estaVigente())
 				.findAny()
 				.get();
