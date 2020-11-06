@@ -13,7 +13,7 @@ import java.time.LocalTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import estacionamiento.Estacionamiento;
+
 import estacionamiento.EstacionamientoApp;
 import estacionamiento.EstacionamientoPuntual;
 
