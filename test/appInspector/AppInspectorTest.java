@@ -25,7 +25,7 @@ class AppInspectorTest {
 		this.zona = "Bernal";
 		String nombre = "juan";
 		this.aplicacion = new AppInspector(this.controlEstacionamiento,nombre,this.controlInfraccion);
-		when(controlEstacionamiento.tieneEstacionamientoVigente(this.patente)).thenReturn(true);
+		when(controlEstacionamiento.tieneEstacionamientoVigenteConPatente(this.patente)).thenReturn(true);
 	}
 	
 	@Test

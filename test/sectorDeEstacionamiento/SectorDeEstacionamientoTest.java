@@ -47,12 +47,12 @@ class SectorDeEstacionamientoTest {
 		when(estacionamiento.estaVigente()).thenReturn(true,false);
 		when(estacionamiento.esSuPatente("11AA")).thenReturn(true);
 		//No hay estacionamiento registrado con esa patente
-		assertFalse(sectorDeEstacionamiento.tieneEstacionamientoVigente("11AA"));
+		assertFalse(sectorDeEstacionamiento.tieneEstacionamientoVigenteConPatente("11AA"));
 		//El estacionamiento esta registrado con esa patente y esta vigente
 		sectorDeEstacionamiento.registrarEstacionamiento(estacionamiento);
-		assertTrue(sectorDeEstacionamiento.tieneEstacionamientoVigente("11AA"));
+		assertTrue(sectorDeEstacionamiento.tieneEstacionamientoVigenteConPatente("11AA"));
 		//El estacionamiento esta registrado con esa patente pero no esta vigente
-		assertFalse(sectorDeEstacionamiento.tieneEstacionamientoVigente("11AA"));
+		assertFalse(sectorDeEstacionamiento.tieneEstacionamientoVigenteConPatente("11AA"));
 
 	}
 	@Test
@@ -76,8 +76,8 @@ class SectorDeEstacionamientoTest {
 		//agrego los estacionamientos vigentes
 		sectorDeEstacionamiento.registrarEstacionamiento(estacionamiento);
 		sectorDeEstacionamiento.registrarEstacionamiento(estacionamiento2);
-		assertTrue(sectorDeEstacionamiento.tieneEstacionamientoVigente("11AA"));
-		assertTrue(sectorDeEstacionamiento.tieneEstacionamientoVigente("22BB"));
+		assertTrue(sectorDeEstacionamiento.tieneEstacionamientoVigenteConPatente("11AA"));
+		assertTrue(sectorDeEstacionamiento.tieneEstacionamientoVigenteConPatente("22BB"));
 		//finalizo los estacionamientos
 		sectorDeEstacionamiento.finalizarTodosLosEstacionamientos();
 		//verifico que hayan finalizado

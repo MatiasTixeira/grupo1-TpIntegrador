@@ -30,7 +30,7 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 	}
 
 	@Override
-	public Boolean tieneEstacionamientoVigente(String patente) {
+	public Boolean tieneEstacionamientoVigenteConPatente(String patente) {
 		Boolean estaVigente = this.getEstacionamientos()
 				.stream()
 				.anyMatch(estacionamiento ->
@@ -109,6 +109,16 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 	public Double getPrecioPorHora() {
 		
 		return this.precioPorHora;
+	}
+
+	@Override
+	public Boolean tieneEstacionamientoVigenteConCelular(String celular) {
+		Boolean estaVigente = this.getEstacionamientos()
+				.stream()
+				.anyMatch(estacionamiento ->
+						estacionamiento.esSuCelular(celular) &&
+						estacionamiento.estaVigente());
+		return estaVigente;
 	}
 
 }
