@@ -19,11 +19,11 @@ public class EstacionamientoPuntual extends Estacionamiento {
 	}
 
 	public CompraPuntual getCompra() {
-		return compra;
+		return this.compra;
 	}
 
 	public void setCompra(CompraPuntual compra) {
-		this.compra = compra;
+		this.compra = compra; 
 	}
 	public boolean esSuCelular(String celular) {
 		return false;
