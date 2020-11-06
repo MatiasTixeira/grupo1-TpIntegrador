@@ -46,4 +46,12 @@ class PuntoDeVentaTest {
 		verify(this.ctrlEst).registrarEstacionamiento(any(EstacionamientoPuntual.class));
 	}
 	
+	@Test
+	void cuandoQuiereComprarUnEstaionamientoPor20HsSoloDejaUnaCantidadExacta() {
+		when(ctrlEst.getHoraFin()).thenReturn(LocalTime.of(20, 0));
+		this.punto.comprarEstacionamiento("112233", 15);
+		CompraPuntual compra = new CompraPuntual(punto,11);
+		verify(this.regis).registrar(compra);
+	}
+
 }

@@ -34,7 +34,7 @@ public class PuntoDeVenta {
 
 		LocalTime horaActual = LocalTime.now();
 		LocalTime horaMaxima = this.getControlEst().getHoraFin();
-		Integer horasCompradas = Math.min(10000, horaMaxima.getHour() - horaActual.getHour());
+		Integer horasCompradas = Math.min(cantHoras, horaMaxima.getHour() - horaActual.getHour());
 		LocalTime horaDebitable = horaActual.plusHours(horasCompradas);
 		LocalTime horaFin = horaDebitable.isBefore(horaMaxima)
 				? horaDebitable
