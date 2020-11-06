@@ -33,7 +33,7 @@ public class AppInspector {
 	}
 
 	public Boolean tieneEstacionamientoVigente(String patente) {
-		return this.getControlE().tieneEstacionamientoVigente(patente);
+		return this.getControlE().tieneEstacionamientoVigenteConPatente(patente);
 	}
 	
 	public void registrarInfraccion(String patente, String zona) {
