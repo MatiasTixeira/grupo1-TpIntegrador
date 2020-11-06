@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.spy;
 
 import java.time.LocalTime;
 
@@ -45,4 +46,5 @@ class PuntoDeVentaTest {
 		verify(this.regis).registrar( any(CompraPuntual.class) );
 		verify(this.ctrlEst).registrarEstacionamiento(any(EstacionamientoPuntual.class));
 	}
+	
 }

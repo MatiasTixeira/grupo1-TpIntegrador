@@ -1,6 +1,5 @@
 package sectorDeSaldos;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class SectorDeSaldo implements ISectorSaldo {
@@ -28,7 +27,11 @@ public class SectorDeSaldo implements ISectorSaldo {
 	}
 
 	public Double saldo(String numCelular) {
-		return this.getCreditoCelulares().get(numCelular);
+		Double valorARetornar = 
+		this.getCreditoCelulares().containsKey(numCelular)
+			? this.getCreditoCelulares().get(numCelular)
+			: 0;
+		return valorARetornar;
 	}
 	
 	public void descontar(String numCelular, Double cantADescontar) {
