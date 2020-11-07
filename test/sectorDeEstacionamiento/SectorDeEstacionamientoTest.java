@@ -58,23 +58,34 @@ class SectorDeEstacionamientoTest {
 	@Test
 	void retornoDeEstacionamientoVigente(){
 		EstacionamientoApp estacionamiento = mock(EstacionamientoApp.class);
-		when(estacionamiento.estaVigente()).thenReturn(true);
-		when(estacionamiento.esSuCelular("03-03-456")).thenReturn(true);
+		when(estacionamiento.estaVigente()).thenReturn(true,false);
+		when(estacionamiento.esSuCelular("03-03-456")).thenReturn(true,false);
 
 		sectorDeEstacionamiento.registrarEstacionamiento(estacionamiento);
 		assertEquals(estacionamiento,sectorDeEstacionamiento.estacionamientoVigente("03-03-456"));
-
+		
 	}
 	
 	@Test
-	void retornoDeEstacionamientoVigenteBuscadoPorElNumeroCelular(){
+	void tieneEstacionamientoVigenteBuscadoPorElNumeroCelular(){
 		EstacionamientoApp estacionamiento = mock(EstacionamientoApp.class);
+		EstacionamientoPuntual estacionamientoPuntual = mock(EstacionamientoPuntual.class);
+		EstacionamientoApp estacionamientoApp2 = mock(EstacionamientoApp.class);
+		when(estacionamientoApp2.estaVigente()).thenReturn(false);
+		when(estacionamientoApp2.esSuCelular("12-112-134")).thenReturn(true);
 		when(estacionamiento.estaVigente()).thenReturn(true);
 		when(estacionamiento.esSuCelular("03-03-456")).thenReturn(true);
+		when(estacionamientoPuntual.estaVigente()).thenReturn(true);
+		when(estacionamientoPuntual.esSuCelular("04-03-03")).thenReturn(false);
+		
 
 		sectorDeEstacionamiento.registrarEstacionamiento(estacionamiento);
-		assertEquals(true,sectorDeEstacionamiento.tieneEstacionamientoVigenteConCelular("03-03-456"));
-
+		sectorDeEstacionamiento.registrarEstacionamiento(estacionamientoApp2);
+		sectorDeEstacionamiento.registrarEstacionamiento(estacionamientoPuntual);
+		
+		assertTrue(sectorDeEstacionamiento.tieneEstacionamientoVigenteConCelular("03-03-456"));
+		assertFalse(sectorDeEstacionamiento.tieneEstacionamientoVigenteConCelular("04-03-03"));
+		assertFalse(sectorDeEstacionamiento.tieneEstacionamientoVigenteConCelular("12-112-134"));
 	}
 	@Test
 	void cuandoSefinalizanTodosLosEstacionamientosNoEstanMasVigentes() {
@@ -101,8 +112,10 @@ class SectorDeEstacionamientoTest {
 		SectorDeEstacionamiento spySectorDeEstacionamiento = spy(sectorDeEstacionamiento);
 		when(spySectorDeEstacionamiento.horaActual())
 			.thenReturn(LocalTime.of(10, 0),LocalTime.of(10, 0)
-						,LocalTime.of(22, 0),LocalTime.of(22, 0));
+						,LocalTime.of(22, 0),LocalTime.of(22, 0)
+						,LocalTime.of(6, 0),LocalTime.of(6, 0));
 		assertTrue(spySectorDeEstacionamiento.esHorarioDeEstacionamiento());
+		assertFalse(spySectorDeEstacionamiento.esHorarioDeEstacionamiento());
 		assertFalse(spySectorDeEstacionamiento.esHorarioDeEstacionamiento());
 	}
 }
