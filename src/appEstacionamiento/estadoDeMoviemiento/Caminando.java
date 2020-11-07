@@ -11,7 +11,7 @@ public class Caminando extends EstadoDeMovimiento {
 	@Override
 	public void isDriving() {
 		this.getApp().setEstadoDeMovimiento(new Manejando(this.getApp()));
-		this.getApp().comenzoACaminar();
+		this.getApp().comenzoAManejar();
 	}
 
 	@Override
