@@ -31,6 +31,11 @@ class sectorDeSaldoTest {
 	}
 	
 	@Test
+	void cuandoSeInstanciaLaClaseTodosLosSaldosQuedanGuardados() {
+		assertEquals(creditoCelulares, sectorDeSaldo.getSaldos());
+	}
+	
+	@Test
 	void elCelularSiPuedePagarElEstacionamiento() {
 		assertEquals(true, sectorDeSaldo.creditoSuficiente(10d, "334455") );
 	}
