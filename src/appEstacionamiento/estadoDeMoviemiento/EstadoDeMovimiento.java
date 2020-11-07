@@ -1,19 +1,19 @@
 package appEstacionamiento.estadoDeMoviemiento;
 
-import appEstacionamiento.AppEstacionamiento;
+import appEstacionamiento.AppEstacionamiento; 
 
 public abstract class EstadoDeMovimiento {
 	private AppEstacionamiento app;
 
-	protected EstadoDeMovimiento(AppEstacionamiento app) {
+	public EstadoDeMovimiento(AppEstacionamiento app) {
 		this.setApp(app);
 	}
 
-	protected AppEstacionamiento getApp() {
-		return app;
+	public AppEstacionamiento getApp() {
+		return this.app;
 	}
 
-	protected void setApp(AppEstacionamiento app) {
+	public void setApp(AppEstacionamiento app) {
 		this.app = app;
 	}
 
