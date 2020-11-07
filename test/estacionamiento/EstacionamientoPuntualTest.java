@@ -39,9 +39,7 @@ class EstacionamientoPuntualTest {
 		estacionamiento = 
 				new EstacionamientoPuntual("AAA-111",LocalTime.of(10, 0),LocalTime.of(14, 0),compra);
 		assertTrue(estacionamiento.estaVigente());
-		
 		estacionamiento.finalizar();
-		
 		assertFalse(estacionamiento.estaVigente());
 		
 		

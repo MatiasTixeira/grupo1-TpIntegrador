@@ -19,7 +19,7 @@ public class RespuestaFinEstacionamiento implements Respuesta {
 		this.setCosto(costo);
 	}
 
-	private LocalTime getHoraInicio() {
+	public LocalTime getHoraInicio() {
 		return horaInicio;
 	}
 
@@ -27,7 +27,7 @@ public class RespuestaFinEstacionamiento implements Respuesta {
 		this.horaInicio = horaInicio;
 	}
 
-	private LocalTime getHoraFin() {
+	public LocalTime getHoraFin() {
 		return horaFin;
 	}
 
@@ -35,7 +35,7 @@ public class RespuestaFinEstacionamiento implements Respuesta {
 		this.horaFin = horaFin;
 	}
 
-	private Integer getCantHoras() {
+	public Integer getCantHoras() {
 		return cantHoras;
 	}
 
@@ -43,7 +43,7 @@ public class RespuestaFinEstacionamiento implements Respuesta {
 		this.cantHoras = cantHoras;
 	}
 
-	private Double getCosto() {
+	public Double getCosto() {
 		return costo;
 	}
 
@@ -63,10 +63,6 @@ public class RespuestaFinEstacionamiento implements Respuesta {
 			this.getCosto();
 	}
 
-	@Override
-	public Boolean operacionExitosa() {
-		return true;
-	}
 
 
 }

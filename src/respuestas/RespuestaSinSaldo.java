@@ -7,8 +7,4 @@ public class RespuestaSinSaldo implements Respuesta {
 		return "Saldo insuficiente. Estacionamiento no permitido.";
 	}
 
-	@Override
-	public Boolean operacionExitosa() {
-		return false;
-	}
 }

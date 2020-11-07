@@ -28,11 +28,6 @@ public class RespuestaInicioEstacionamiento implements Respuesta {
 	}
 
 	@Override
-	public Boolean operacionExitosa() {
-		return true;
-	}
-
-	@Override
 	public String respuestaComoString() {
 		return "El estacionamiento comenzó a las " +
 			this.getHoraInicio() +

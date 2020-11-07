@@ -18,6 +18,20 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 	private IControlSaldo controlSaldo;
 	private IControlZonas controlZonas;
 
+	public ServerEstacionamiento(
+			IControlDeEstacionamiento cE, 
+			IControlSaldo cS,
+			IControlZonas cZ) {
+		this.setControlEstacionamiento(cE);
+		this.setControlSaldo(cS);
+		this.setZonas(cZ);
+	}
+	
+	private void setZonas(IControlZonas cZ) {
+		this.controlZonas = cZ;
+		
+	}
+
 	public IControlDeEstacionamiento getControlEstacionamiento() {
 		return this.controlEstacionamiento;
 	}
@@ -41,13 +55,9 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 	@Override
 	public Respuesta iniciarEstacionamiento(String nroCelular, String patente) {
 		Respuesta res;
-
 		if (this.getControlSaldo().saldo(nroCelular) <= 0) {
-
 			res = new RespuestaSinSaldo();
-
 		} else {
-
 			LocalTime horaInicio = LocalTime.now();
 			LocalTime horaMaxima = this.getControlEstacionamiento().getHoraFin();
 			Double precioPorSegundo = this.getControlEstacionamiento().getPrecioPorHora() / 3600;
@@ -55,20 +65,15 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 				Math.min(
 					LocalTime.of(23, 59, 59).toSecondOfDay() - horaInicio.toSecondOfDay(),
 					(int) (this.getControlSaldo().saldo(nroCelular) / precioPorSegundo));
-
-
 			LocalTime horaDebitable = horaInicio.plusSeconds(segundosDebitables);
 			LocalTime horaFin = horaDebitable.isBefore(horaMaxima)
 					? horaDebitable
 					: horaMaxima;
-
 			this.getControlEstacionamiento().registrarEstacionamiento(
 					new EstacionamientoApp(patente, horaInicio, horaFin, nroCelular)
 			);
-
 			res = new RespuestaInicioEstacionamiento(horaInicio, horaFin);
 		}
-
 		return res;
 	}
 
