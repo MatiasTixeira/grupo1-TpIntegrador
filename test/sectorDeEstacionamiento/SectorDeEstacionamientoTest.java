@@ -56,13 +56,24 @@ class SectorDeEstacionamientoTest {
 
 	}
 	@Test
-	void retornoDeEstacionamientoVigenteBuscadoPorElNumeroCelular(){
+	void retornoDeEstacionamientoVigente(){
 		EstacionamientoApp estacionamiento = mock(EstacionamientoApp.class);
 		when(estacionamiento.estaVigente()).thenReturn(true);
 		when(estacionamiento.esSuCelular("03-03-456")).thenReturn(true);
 
 		sectorDeEstacionamiento.registrarEstacionamiento(estacionamiento);
 		assertEquals(estacionamiento,sectorDeEstacionamiento.estacionamientoVigente("03-03-456"));
+
+	}
+	
+	@Test
+	void retornoDeEstacionamientoVigenteBuscadoPorElNumeroCelular(){
+		EstacionamientoApp estacionamiento = mock(EstacionamientoApp.class);
+		when(estacionamiento.estaVigente()).thenReturn(true);
+		when(estacionamiento.esSuCelular("03-03-456")).thenReturn(true);
+
+		sectorDeEstacionamiento.registrarEstacionamiento(estacionamiento);
+		assertEquals(true,sectorDeEstacionamiento.tieneEstacionamientoVigenteConCelular("03-03-456"));
 
 	}
 	@Test

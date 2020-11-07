@@ -24,4 +24,9 @@ class CompraPuntualTestCase {
 		assertEquals(1000, compraPuntual.getNumeroDeControl());
 	}
 
+	@Test
+	void cuandoComproUnaCiertaCantidadDeHorasQuedaRegistro() {
+		compraPuntual.setNumeroDeControl(1000);
+		assertEquals(4, compraPuntual.getCantidadDeHoras());
+	}
 }
