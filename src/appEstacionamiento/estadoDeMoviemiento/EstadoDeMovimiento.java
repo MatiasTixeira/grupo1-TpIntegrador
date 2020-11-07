@@ -21,3 +21,4 @@ public abstract class EstadoDeMovimiento {
 
 	public abstract void isWalking();
 }
+

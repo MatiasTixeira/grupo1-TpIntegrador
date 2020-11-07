@@ -12,9 +12,9 @@ import sectorDeSaldos.IControlSaldo;
 public class PuntoDeVenta {
 
 	//atributos
-	IControlSaldo controlSal;
-	IControlDeEstacionamiento controlEst;
-	IRegistroCompras controlCom;
+	private IControlSaldo controlSal;
+	private IControlDeEstacionamiento controlEst;
+	private IRegistroCompras controlCom;
 
 	//constructor
 	public PuntoDeVenta(

@@ -69,6 +69,7 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 
 		return esHorarioDeEstacionamiento;
 	}
+	
 	public LocalTime horaActual() {
 		return LocalTime.now();
 	}
@@ -103,7 +104,6 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 		this.precioPorHora = precioPorHora;
 
 	}
-
 
 	@Override
 	public Double getPrecioPorHora() {

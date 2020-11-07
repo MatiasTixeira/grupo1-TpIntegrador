@@ -6,7 +6,7 @@ import espacioGeografico.Ubicacion;
 public class SectorDeZonas implements ISectorZonas{
 
 	//atributos 
-	ArrayList<ZonaDeEstacionamiento> zonas;
+	private ArrayList<ZonaDeEstacionamiento> zonas;
 	
 	public SectorDeZonas() {
 		this.setZonas(new ArrayList<ZonaDeEstacionamiento>());

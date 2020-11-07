@@ -20,11 +20,10 @@ public abstract class Estacionamiento {
 		this.setEstaActivo(true);
 	}
 	
-	
-
 	public String getPatente() {
 		return patente;
 	}
+	
 	public boolean esSuPatente(String patente) {
 		return this.getPatente().equals(patente);
 	}
@@ -35,7 +34,7 @@ public abstract class Estacionamiento {
 		this.patente = patente;
 	}
 
-	protected LocalTime getHoraInicio() {
+	public LocalTime getHoraInicio() {
 		return horaInicio;
 	}
 
@@ -43,7 +42,7 @@ public abstract class Estacionamiento {
 		this.horaInicio = horaInicio;
 	}
 
-	protected LocalTime getHoraFin() {
+	public LocalTime getHoraFin() {
 		return horaFin;
 	}
 
@@ -51,15 +50,14 @@ public abstract class Estacionamiento {
 		this.horaFin = horaFin;
 	}
 
-
 	public Boolean estaVigente() {
 		Boolean estaVigente = LocalTime.now().isBefore(this.getHoraFin()) 
 				&& this.estaActivo;
 		return estaVigente ;
 	}
+	
 	public abstract void finalizar();
 		
-
 	public void setEstaActivo(Boolean estaActivo) {
 		this.estaActivo = estaActivo;
 	}

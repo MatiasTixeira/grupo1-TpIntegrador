@@ -7,7 +7,7 @@ import appInspector.Infraccion;
 public class SectorDeInfracciones {
 	
 	//atributos 
-	ArrayList<Infraccion> listaInfracciones;	
+	private ArrayList<Infraccion> listaInfracciones;	
 	
 	//Constructor 
 	public SectorDeInfracciones() {
@@ -23,7 +23,7 @@ public class SectorDeInfracciones {
 		this.getInfracciones().add(infraccion);
 	}
 	
-	public void setListaInfracciones(ArrayList<Infraccion> listaInfracciones) {
+	private void setListaInfracciones(ArrayList<Infraccion> listaInfracciones) {
 		this.listaInfracciones = listaInfracciones;
 	}
 }

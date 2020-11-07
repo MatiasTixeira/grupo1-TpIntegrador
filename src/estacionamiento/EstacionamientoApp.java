@@ -14,12 +14,15 @@ public class EstacionamientoApp extends Estacionamiento {
 		super(patente, horaInicio, horaFin);
 		this.setNumeroCelular(nroCelular);
 	}
+	
 	public boolean esSuCelular(String celular) {
 		return this.getNumeroCelular().equals(celular);
 	}
+	
 	public void setNumeroCelular(String nroCelular) {
 		this.numeroCelular = nroCelular;
 	}
+	
 	public String getNumeroCelular() {
 		return this.numeroCelular;
 	}
@@ -30,5 +33,4 @@ public class EstacionamientoApp extends Estacionamiento {
 		
 	}
 	
-
 }

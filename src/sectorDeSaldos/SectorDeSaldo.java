@@ -5,7 +5,7 @@ import java.util.Map;
 public class SectorDeSaldo implements ISectorSaldo {
 
 	//atributos 
-	Map<String, Double> creditoCelulares;
+	private Map<String, Double> creditoCelulares;
 	
 	
 	//constructor 

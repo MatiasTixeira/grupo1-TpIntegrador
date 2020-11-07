@@ -87,7 +87,7 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 		Integer cantHoras = horaFin.getHour() - horaInicio.getHour();
 		Double costo = segundosCobrados * precioPorSegundo;
 
-		return new RespuestaFinEstacionamiento(horaInicio, horaFin, cantHoras, costo);;
+		return new RespuestaFinEstacionamiento(horaInicio, horaFin, cantHoras, costo);
 	}
 
 	@Override
@@ -97,6 +97,7 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 
 	@Override
 	public Boolean tieneEstacionamientoVigente(String patente) {
-		return this.getControlEstacionamiento().tieneEstacionamientoVigente(patente);
+		return this.getControlEstacionamiento().tieneEstacionamientoVigenteConPatente(patente);
 	}
+	
 }

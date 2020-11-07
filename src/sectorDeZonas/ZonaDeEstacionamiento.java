@@ -9,9 +9,9 @@ import puntoDeVenta.PuntoDeVenta;
 public class ZonaDeEstacionamiento{
 	
 	//atributos 
-	String inspector;
-	UbicacionGeografica ubicacion;
-	ArrayList<PuntoDeVenta> puntosDeVenta;
+	private String inspector;
+	private UbicacionGeografica ubicacion;
+	private ArrayList<PuntoDeVenta> puntosDeVenta;
 	
 	
 	public ZonaDeEstacionamiento(String i,UbicacionGeografica u, ArrayList<PuntoDeVenta> puntosDeVenta) {

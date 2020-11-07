@@ -4,7 +4,7 @@ public class RespuestaYaTieneEstacionamientoVigente implements Respuesta {
 
 	@Override
 	public String respuestaComoString() {
-		return "El número indicado ya tiene un estacionamiento vigente. Estacionamiento no permitido.";
+		return "El numero indicado ya tiene un estacionamiento vigente. Estacionamiento no permitido.";
 	}
 
 	@Override
