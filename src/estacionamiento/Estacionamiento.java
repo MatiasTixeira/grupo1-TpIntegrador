@@ -43,7 +43,7 @@ public abstract class Estacionamiento {
 	}
 
 	public LocalTime getHoraFin() {
-		return horaFin;
+		return this.horaFin;
 	}
 
 	public void setHoraFin(LocalTime horaFin) {

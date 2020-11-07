@@ -30,6 +30,7 @@ public class EstacionamientoApp extends Estacionamiento {
 	@Override 
 	public void finalizar() {
 		this.setEstaActivo(false);
+		this.setHoraFin(LocalTime.now());
 		
 	}
 	
