@@ -25,13 +25,16 @@ public class AppEstacionamiento implements MovementSensor {
 	public AppEstacionamiento(
 			String nroCelular,
 			String patente,
-			IServerEstacionamientoApp server,
+			EstadoDeMovimiento estadoMov,
+			ModoDeAlerta modoDeAlerta,
+			ModoDeActivacion modoAct,
+			IServerEstacionamientoApp server,			
 			GPS gps,
 			GUI gui) {
 
-		this.setModoDeAlerta(new AlertaDesactivada());
-		this.setModoDeActivacion(new ModoManual());
-		this.setEstadoDeMovimiento(new Caminando(this));
+		this.setModoDeAlerta(modoDeAlerta);
+		this.setModoDeActivacion(modoAct);
+		this.setEstadoDeMovimiento(estadoMov);
 		this.setNroCelular(nroCelular);
 		this.setPatente(patente);
 		this.setServer(server);
@@ -59,7 +62,7 @@ public class AppEstacionamiento implements MovementSensor {
 		this.estadoDeMovimiento = estadoDeMovimiento;
 	}
 
-	private EstadoDeMovimiento getEstadoDeMovimiento() {
+	public EstadoDeMovimiento getEstadoDeMovimiento() {
 		return this.estadoDeMovimiento;
 	}
 
