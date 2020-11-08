@@ -16,7 +16,7 @@ class ModoAutomaticoTest {
 
 private ModoAutomatico modoAutomatico;
 	
-	@Test
+	@Test 
 	void cuandoLeLlegaElMensajeComenzoACaminarElServerIniciaElEstacionamientoElServerIniciaElEstacionamientoYSeEnviaLasRespuestasAlGui() {
 		IServerEstacionamientoApp server = mock(IServerEstacionamientoApp.class);
 		String nroCelular = "03-03-456";
