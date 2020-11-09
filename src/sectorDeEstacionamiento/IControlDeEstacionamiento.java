@@ -13,6 +13,7 @@ public interface IControlDeEstacionamiento {
 	public LocalTime getHoraFin();
 	public Double getPrecioPorHora();
 	public Boolean tieneEstacionamientoVigenteConCelular(String celular);
+	public LocalTime getHoraInicio();
 
 }
 

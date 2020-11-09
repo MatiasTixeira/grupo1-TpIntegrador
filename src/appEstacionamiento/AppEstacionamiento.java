@@ -1,14 +1,14 @@
 package appEstacionamiento;
 
-import appEstacionamiento.estadoDeMoviemiento.Caminando;
+import java.time.LocalTime;
+
 import appEstacionamiento.estadoDeMoviemiento.EstadoDeMovimiento;
 import appEstacionamiento.modoDeActivacion.ModoDeActivacion;
-import appEstacionamiento.modoDeActivacion.ModoManual;
-import appEstacionamiento.modoDeAlerta.AlertaDesactivada;
 import appEstacionamiento.modoDeAlerta.ModoDeAlerta;
 import espacioGeografico.GPS;
 import espacioGeografico.Ubicacion;
 import respuestas.Respuesta;
+import respuestas.RespuestaOperacionFallida;
 import serverEstacionamiento.IServerEstacionamientoApp;
 
 public class AppEstacionamiento implements MovementSensor {
@@ -28,7 +28,7 @@ public class AppEstacionamiento implements MovementSensor {
 			EstadoDeMovimiento estadoMov,
 			ModoDeAlerta modoDeAlerta,
 			ModoDeActivacion modoAct,
-			IServerEstacionamientoApp server,			
+			IServerEstacionamientoApp server,
 			GPS gps,
 			GUI gui) {
 
@@ -125,59 +125,77 @@ public class AppEstacionamiento implements MovementSensor {
 	}
 
 	public void iniciarEstacionamiento() {
-		Respuesta respuesta = this.getServer().iniciarEstacionamiento(
-				this.getNroCelular(), this.getPatente());
+		this.getGui().print(this.inicioEstacionamiento().respuestaComoString());
+	}
 
-		this.setUltimaUbicacionEst(this.getGps().ubicacionActual());
-		this.getGui().print(respuesta.respuestaComoString());
+	public Respuesta inicioEstacionamiento() {
+		Respuesta respuesta = this.puedeIniciarEstacionamiento()
+			? this.getServer().iniciarEstacionamiento(this.getNroCelular(), this.getPatente())
+			: new RespuestaOperacionFallida();
+
+		this.setUltimaUbicacionEst(respuesta.operacionExitosa()
+			? this.getGps().ubicacionActual()
+			: this.getUltimaUbicacionEst());
+
+		return respuesta;
 	}
 
 	public void finalizarEstacionamiento() {
-		Respuesta respuesta = this.getServer().finalizarEstacionamiento(
-				this.getNroCelular());
+		this.getGui().print(this.finEstacionamiento().respuestaComoString());
+	}
 
-		this.getGui().print(respuesta.respuestaComoString());
+	public Respuesta finEstacionamiento() {
+
+		return this.puedeFinalizarEstacionamiento()
+			? this.getServer().finalizarEstacionamiento(this.getNroCelular())
+			: new RespuestaOperacionFallida();
 	}
 
 	public void comenzoACaminar() {
 
-		if (!tieneEstacionamientoVigente() &&
-				this.estaEnZonaEstacionamiento()) {
+		this.getModoDeAlerta().comenzoACaminar(this, this.getGui());
 
-			this.getModoDeAlerta().comenzoACaminar(this.getGui());
-
-			this.getModoDeActivacion().comenzoACaminar(
-					this.getServer(),
-					this.getPatente(),
-					this.getNroCelular(),
-					this.getGui());
-		}
+		this.getModoDeActivacion().comenzoACaminar(this, this.getGui());
 	}
 
 	public void comenzoAManejar() {
 
-		if (this.tieneEstacionamientoVigente() &&
-				this.ubicacionActual().equals(this.getUltimaUbicacionEst())) {
+		this.getModoDeAlerta().comenzoAManejar(this, this.getGui());
 
-			this.getModoDeAlerta().comenzoAManejar(this.getGui());
-
-			this.getModoDeActivacion().comenzoAManejar(
-					this.getServer(),
-					this.getNroCelular(),
-					this.getGui());
-		}
+		this.getModoDeActivacion().comenzoAManejar(this, this.getGui());
 	}
 
 	private Boolean estaEnZonaEstacionamiento() {
 		return this.getServer().estaEnZonaDeEstacionamiento(this.ubicacionActual());
 	}
 
+	private Boolean tieneEstacionamientoVigente() {
+		return this.getServer().tieneEstacionamientoVigente(this.getPatente());
+	}
+
+	private boolean estaEnHorario() {
+		return LocalTime.now().isBefore(this.getServer().getHoraFin())
+				&& LocalTime.now().isAfter(this.getServer().getHoraInicio());
+	}
+
 	private Ubicacion ubicacionActual() {
 		return this.getGps().ubicacionActual();
 	}
 
-	private Boolean tieneEstacionamientoVigente() {
-		return this.getServer().tieneEstacionamientoVigente(this.getPatente());
+	public Boolean estaEnUltimaUbicacion() {
+		return this.ubicacionActual().equals(this.getUltimaUbicacionEst());
+	}
+
+	public Boolean puedeIniciarEstacionamiento() {
+		return this.estaEnZonaEstacionamiento()
+				&& !this.tieneEstacionamientoVigente()
+				&& this.estaEnHorario();
+	}
+
+	public Boolean puedeFinalizarEstacionamiento() {
+		return this.estaEnUltimaUbicacion()
+				&& this.tieneEstacionamientoVigente()
+				&& this.estaEnHorario();
 	}
 
 }

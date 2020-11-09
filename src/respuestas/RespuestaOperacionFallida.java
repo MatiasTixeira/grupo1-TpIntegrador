@@ -1,10 +1,10 @@
 package respuestas;
 
-public class RespuestaSinSaldo implements Respuesta {
+public class RespuestaOperacionFallida implements Respuesta {
 
 	@Override
 	public String respuestaComoString() {
-		return "Saldo insuficiente. Estacionamiento no permitido.";
+		return "No se puede realizar la operación.";
 	}
 
 	@Override

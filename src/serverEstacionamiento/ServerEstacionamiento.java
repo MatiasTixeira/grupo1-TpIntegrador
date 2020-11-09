@@ -19,17 +19,17 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 	private IControlZonas controlZonas;
 
 	public ServerEstacionamiento(
-			IControlDeEstacionamiento cE, 
+			IControlDeEstacionamiento cE,
 			IControlSaldo cS,
 			IControlZonas cZ) {
 		this.setControlEstacionamiento(cE);
 		this.setControlSaldo(cS);
 		this.setZonas(cZ);
 	}
-	
+
 	private void setZonas(IControlZonas cZ) {
 		this.controlZonas = cZ;
-		
+
 	}
 
 	public IControlDeEstacionamiento getControlEstacionamiento() {
@@ -104,5 +104,15 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 	public Boolean tieneEstacionamientoVigente(String patente) {
 		return this.getControlEstacionamiento().tieneEstacionamientoVigenteConPatente(patente);
 	}
-	
+
+	@Override
+	public LocalTime getHoraFin() {
+		return this.getControlEstacionamiento().getHoraFin();
+	}
+
+	@Override
+	public LocalTime getHoraInicio() {
+		return this.getControlEstacionamiento().getHoraInicio();
+	}
+
 }
