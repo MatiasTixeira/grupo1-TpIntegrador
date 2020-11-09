@@ -1,23 +1,29 @@
 package serverDeEstacionamiento;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import espacioGeografico.Ubicacion;
 import estacionamiento.Estacionamiento;
+import estacionamiento.EstacionamientoApp;
+import respuestas.Respuesta;
 import respuestas.RespuestaFinEstacionamiento;
 import respuestas.RespuestaInicioEstacionamiento;
 import respuestas.RespuestaSinSaldo;
 import sectorDeEstacionamiento.IControlDeEstacionamiento;
 import sectorDeSaldos.IControlSaldo;
 import sectorDeZonas.IControlZonas;
-import serverEstacionamiento.IServerEstacionamientoApp;
 import serverEstacionamiento.ServerEstacionamiento;
 
 class ServerDeEstacionamientoTest {
@@ -25,81 +31,124 @@ class ServerDeEstacionamientoTest {
 	IControlSaldo controlSaldo;
 	IControlZonas controlZonas;
 	ServerEstacionamiento server;
-	
+	String nroCelular;
+	String patente;
+
 	@BeforeEach
 	public void setUp() {
-		controlEstacionamiento = mock(IControlDeEstacionamiento.class);
-		controlSaldo = mock(IControlSaldo.class);
-	    controlZonas = mock(IControlZonas.class);
+		this.controlEstacionamiento = mock(IControlDeEstacionamiento.class);
+		this.controlSaldo = mock(IControlSaldo.class);
+		this.controlZonas = mock(IControlZonas.class);
+		this.nroCelular = "1124600909";
+		this.patente = "ABC123";
 	    server = new ServerEstacionamiento(controlEstacionamiento,controlSaldo,controlZonas);
 	    when(controlEstacionamiento.getPrecioPorHora()).thenReturn(40d);
 	    when(controlEstacionamiento.getHoraFin()).thenReturn(LocalTime.of(20, 00));
 	}
-		
-	@Test
-	void sePuedeAccederALosCamposSeteadosEnElConstructor() {
-		when(controlEstacionamiento.getHoraInicio()).thenReturn(LocalTime.of(10, 00));
-		when(controlEstacionamiento.getHoraFin()).thenReturn(LocalTime.of(20, 00));
-		assertEquals(LocalTime.of(20, 00) ,server.getHoraFin());
-		assertEquals(LocalTime.of(10, 00) ,server.getHoraInicio());
-	}
-	
-	@Test
-	void unServerDeEstacionamientoPuedeFinalizarUnEstacionamientoYEsteDevuelveUnaRespuesta() {
-		String celu = "1124600909";
-		LocalTime horaInicio = LocalTime.of(10, 0);
-		LocalTime horaFin = LocalTime.of(15, 0);
-		Estacionamiento est = mock(Estacionamiento.class);
-		when(est.getHoraInicio()).thenReturn(horaInicio);
-		when(est.getHoraFin()).thenReturn(horaFin);
-		when(controlEstacionamiento.estacionamientoVigente(celu)).thenReturn(est);
-		RespuestaFinEstacionamiento res = 
-				(RespuestaFinEstacionamiento) server.finalizarEstacionamiento(celu);
-		assertEquals(res.getCantHoras(),5);
-		assertEquals(res.getCosto(),200);
-		assertEquals(res.getHoraFin(),horaFin);
-		assertEquals(res.getHoraInicio(),horaInicio);
-	}
-	
-	@Test
-	void elServerPuedeIniciarUnEstacionamientoYCuandoHaySaldoDaUnaRespuestaInicioDeEstacionamiento() {
-		String celu = "1124600909";
-		String patente = "ABC123";
-		LocalTime horaInicio = LocalTime.now();
-		LocalTime horaFin = LocalTime.of(20, 0);
-		when(controlSaldo.saldo(celu)).thenReturn(2000d);
-		Estacionamiento est = mock(Estacionamiento.class);
-		when(est.getHoraInicio()).thenReturn(horaInicio);
-		when(est.getHoraFin()).thenReturn(horaFin);
-		RespuestaInicioEstacionamiento res = 
-				(RespuestaInicioEstacionamiento) server.iniciarEstacionamiento(celu,patente);
-		assertEquals(res.getHoraFin(),horaFin);
-		assertEquals(res.getHoraInicio().getHour(),horaInicio.getHour());
-		//Si no ponemos por horas falla por milisegundos
-	}	
 
 	@Test
-	void elServerPuedeIniciarUnEstacionamientoPeroSiNoTieneSaldoEsteDevuelveUnaRespuestaSinSaldo() {
-		String celu = "1124600909";
-		String patente = "ABC123";
-		when(controlSaldo.saldo(celu)).thenReturn(0d);
-		RespuestaSinSaldo res = 
-				(RespuestaSinSaldo) server.iniciarEstacionamiento(celu,patente);
-		assertEquals(res.respuestaComoString(),"Saldo insuficiente. Estacionamiento no permitido.");
+	void iniciarEstacionamientoRetornaRespuestaSinSaldoCuandoElNumeroNoTienSaldo() {
+		when(this.controlSaldo.saldo(this.nroCelular)).thenReturn(0d);
+
+		Respuesta res = this.server.iniciarEstacionamiento(nroCelular, patente);
+
+		assertTrue(res instanceof RespuestaSinSaldo);
 	}
 
 	@Test
-	void cuandoUnEstacionamientoEstaEnZonaDeEstacionamientosEsteRetornaTrue() {
+	void iniciarEstacionamientoCon1000000DeSaldoALas9PermiteEstacionarHastaLas20() {
+		when(this.controlSaldo.saldo(this.nroCelular)).thenReturn(1_000_000d);
+		LocalTime horaActual = LocalTime.of(9, 0);
+
+		try(MockedStatic<LocalTime> localTimeMock = Mockito.mockStatic(LocalTime.class, Mockito.CALLS_REAL_METHODS)) {
+
+			localTimeMock.when(LocalTime::now).thenReturn(horaActual);
+
+			RespuestaInicioEstacionamiento res =
+					(RespuestaInicioEstacionamiento) this.server.iniciarEstacionamiento(this.nroCelular, this.patente);
+
+			verify(this.controlEstacionamiento).registrarEstacionamiento(any(Estacionamiento.class));
+			assertEquals(LocalTime.of(9, 0), res.getHoraInicio());
+			assertEquals(LocalTime.of(20, 0), res.getHoraFin());
+		}
+	}
+
+	@Test
+	void iniciarEstacionamientoCon100DeSaldoALas18PermiteEstacionarHastaLas20() {
+		when(this.controlSaldo.saldo(this.nroCelular)).thenReturn(100d);
+		LocalTime horaActual = LocalTime.of(18, 0);
+
+		try(MockedStatic<LocalTime> localTimeMock = Mockito.mockStatic(LocalTime.class, Mockito.CALLS_REAL_METHODS)) {
+
+			localTimeMock.when(LocalTime::now).thenReturn(horaActual);
+
+			RespuestaInicioEstacionamiento res =
+					(RespuestaInicioEstacionamiento) this.server.iniciarEstacionamiento(this.nroCelular, this.patente);
+
+			verify(this.controlEstacionamiento).registrarEstacionamiento(any(Estacionamiento.class));
+			assertEquals(LocalTime.of(18, 0), res.getHoraInicio());
+			assertEquals(LocalTime.of(20, 0), res.getHoraFin());
+		}
+	}
+
+	@Test
+	void iniciarEstacionamientoCon60DeSaldoALas14PermiteEstacionarHastaLas15Y30() {
+		when(this.controlSaldo.saldo(this.nroCelular)).thenReturn(60d);
+		LocalTime horaActual = LocalTime.of(14, 0);
+
+		try(MockedStatic<LocalTime> localTimeMock = Mockito.mockStatic(LocalTime.class, Mockito.CALLS_REAL_METHODS)) {
+
+			localTimeMock.when(LocalTime::now).thenReturn(horaActual);
+
+			RespuestaInicioEstacionamiento res =
+					(RespuestaInicioEstacionamiento) this.server.iniciarEstacionamiento(this.nroCelular, this.patente);
+
+			verify(this.controlEstacionamiento).registrarEstacionamiento(any(Estacionamiento.class));
+			assertEquals(LocalTime.of(14, 0), res.getHoraInicio());
+			assertEquals(LocalTime.of(15, 30), res.getHoraFin());
+		}
+	}
+
+	@Test
+	void finalizarEstacionamientoEncuentraUnEstacionamientoLoFinalizaYEnviaUnaRespuesta() {
+		EstacionamientoApp estacionamiento = mock(EstacionamientoApp.class);
+		when(this.controlEstacionamiento.estacionamientoVigente(this.nroCelular))
+			.thenReturn(estacionamiento);
+
+		Respuesta res = this.server.finalizarEstacionamiento(this.nroCelular);
+
+		verify(estacionamiento).finalizar(this.controlSaldo, this.controlEstacionamiento.getPrecioPorHora());
+		assertTrue(res instanceof RespuestaFinEstacionamiento);
+	}
+
+	@Test
+	void estaEnZonaDeEstacionamientoSeComunicaConControlZonas() {
 		Ubicacion ubicacion = mock(Ubicacion.class);
-		when(controlZonas.perteneceAUnaZonaDeEstacionamiento(ubicacion)).thenReturn(true);
+
 		server.estaEnZonaDeEstacionamiento(ubicacion);
+
+		verify(this.controlZonas).perteneceAUnaZonaDeEstacionamiento(ubicacion);
 	}
 
 	@Test
-	void cuandoUnEstacionamientoVigenteEsteRetornaTrue() {
-		String patente = "112233";
-		when(controlEstacionamiento.tieneEstacionamientoVigenteConPatente(patente)).thenReturn(true);
-		server.tieneEstacionamientoVigente(patente);
+	void tieneEstacionamientoVigenteSeComunicaConControlEstacionamientos() {
+		server.tieneEstacionamientoVigente(this.patente);
+
+		verify(this.controlEstacionamiento).tieneEstacionamientoVigenteConPatente(this.patente);
 	}
-	
+
+	@Test
+	void getHoraFinSeComunicaConControlEstacionamientos() {
+		server.getHoraFin();
+
+		verify(this.controlEstacionamiento).getHoraFin();
+	}
+
+	@Test
+	void getHoraInicioSeComunicaConControlEstacionamientos() {
+		server.getHoraInicio();
+
+		verify(this.controlEstacionamiento).getHoraInicio();
+	}
+
 }
