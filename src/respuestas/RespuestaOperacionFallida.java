@@ -4,7 +4,7 @@ public class RespuestaOperacionFallida implements Respuesta {
 
 	@Override
 	public String respuestaComoString() {
-		return "No se puede realizar la operación.";
+		return "No se puede realizar la operacion.";
 	}
 
 	@Override

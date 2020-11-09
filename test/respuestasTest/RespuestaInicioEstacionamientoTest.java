@@ -3,15 +3,12 @@ package respuestasTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalTime;
-import static org.mockito.Mockito.mock;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import respuestas.RespuestaInicioEstacionamiento;
 
-class RespuestaEstacionamientoTest {
+class RespuestaInicioEstacionamientoTest {
 	RespuestaInicioEstacionamiento resIni;
 	LocalTime ini;
 	LocalTime fin;

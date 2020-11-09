@@ -37,6 +37,14 @@ class ServerDeEstacionamientoTest {
 	}
 		
 	@Test
+	void sePuedeAccederALosCamposSeteadosEnElConstructor() {
+		when(controlEstacionamiento.getHoraInicio()).thenReturn(LocalTime.of(10, 00));
+		when(controlEstacionamiento.getHoraFin()).thenReturn(LocalTime.of(20, 00));
+		assertEquals(LocalTime.of(20, 00) ,server.getHoraFin());
+		assertEquals(LocalTime.of(10, 00) ,server.getHoraInicio());
+	}
+	
+	@Test
 	void unServerDeEstacionamientoPuedeFinalizarUnEstacionamientoYEsteDevuelveUnaRespuesta() {
 		String celu = "1124600909";
 		LocalTime horaInicio = LocalTime.of(10, 0);

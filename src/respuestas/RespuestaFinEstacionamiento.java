@@ -53,13 +53,13 @@ public class RespuestaFinEstacionamiento implements Respuesta {
 
 	@Override
 	public String respuestaComoString() {
-		return  "El estacionamiento comenzó a las " +
+		return  "El estacionamiento comenza a las " +
 			this.getHoraInicio() +
-			" y terminó a las " +
+			" y termina a las " +
 			this.getHoraFin() +
-			". Duró " +
+			". Dura " +
 			this.getCantHoras() +
-			" horas, y costó $" +
+			" horas, y costa $" +
 			this.getCosto();
 	}
 
