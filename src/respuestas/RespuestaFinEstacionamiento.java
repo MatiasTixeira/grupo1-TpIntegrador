@@ -63,6 +63,8 @@ public class RespuestaFinEstacionamiento implements Respuesta {
 			this.getCosto();
 	}
 
-
-
+	@Override
+	public boolean operacionExitosa() {
+		return true;
+	}
 }

@@ -35,4 +35,9 @@ public class RespuestaInicioEstacionamiento implements Respuesta {
 			this.getHoraFin() +
 			".";
 	}
+
+	@Override
+	public boolean operacionExitosa() {
+		return true;
+	}
 }

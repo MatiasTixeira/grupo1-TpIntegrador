@@ -1,31 +1,34 @@
 package appEstacionamiento.modoDeActivacion;
 
+import appEstacionamiento.AppEstacionamiento;
 import appEstacionamiento.GUI;
 import respuestas.Respuesta;
-import serverEstacionamiento.IServerEstacionamientoApp;
 
 public class ModoAutomatico implements ModoDeActivacion {
 
 	@Override
 	public void comenzoAManejar(
-			IServerEstacionamientoApp server,
-			String nroCelular,
+			AppEstacionamiento app,
 			GUI gui) {
 
-		Respuesta res = server.finalizarEstacionamiento(nroCelular);
-		gui.print(res.respuestaComoString());
-		gui.print("Esta operación fue realizada de manera automática");
+		Respuesta res = app.finEstacionamiento();
+
+		if (res.operacionExitosa()) {
+			gui.print(res.respuestaComoString());
+			gui.print("Esta operación fue realizada de manera automática");
+		}
 	}
 
 	@Override
 	public void comenzoACaminar(
-			IServerEstacionamientoApp server,
-			String patente,
-			String nroCelular,
+			AppEstacionamiento app,
 			GUI gui) {
 
-		Respuesta res = server.iniciarEstacionamiento(patente, nroCelular);
-		gui.print(res.respuestaComoString());
-		gui.print("Esta operación fue realizada de manera automática");
+		Respuesta res = app.inicioEstacionamiento();
+
+		if (res.operacionExitosa()) {
+			gui.print(res.respuestaComoString());
+			gui.print("Esta operación fue realizada de manera automática");
+		}
 	}
 }

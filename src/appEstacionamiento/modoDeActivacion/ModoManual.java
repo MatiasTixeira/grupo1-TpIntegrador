@@ -1,21 +1,18 @@
 package appEstacionamiento.modoDeActivacion;
 
+import appEstacionamiento.AppEstacionamiento;
 import appEstacionamiento.GUI;
-import serverEstacionamiento.IServerEstacionamientoApp;
 
 public class ModoManual implements ModoDeActivacion {
 
 	@Override
 	public void comenzoACaminar(
-			IServerEstacionamientoApp server,
-			String patente,
-			String nroCelular,
+			AppEstacionamiento app,
 			GUI gui) {}
 
 	@Override
 	public void comenzoAManejar(
-			IServerEstacionamientoApp server,
-			String nroCelular,
+			AppEstacionamiento app,
 			GUI gui) {}
 
 }
