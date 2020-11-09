@@ -61,7 +61,7 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 			estacionamiento.finalizar(this.getControlSaldo(), this.getPrecioPorHora());
 		}
 
-	}
+	}  
 
 	public IControlSaldo getControlSaldo() {
 		return controlSaldo;

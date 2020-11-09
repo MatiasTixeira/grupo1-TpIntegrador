@@ -31,10 +31,15 @@ public class EstacionamientoApp extends Estacionamiento {
 	
 	@Override 
 	public void finalizar(IControlSaldo controlSaldo, Double precioPorHora) {
-		this.setEstaActivo(false);
-		this.setHoraFin(LocalTime.now());
-		Double costo = this.costo(precioPorHora);
-		controlSaldo.descontar(this.getNumeroCelular(), costo);
+		if(this.getEstaActivo()) {
+			LocalTime horaFin = LocalTime.now().isBefore(this.getHoraFin())
+					? LocalTime.now()
+					: this.getHoraFin();
+			this.setHoraFin(horaFin);
+			Double costo = this.costo(precioPorHora);
+			controlSaldo.descontar(this.getNumeroCelular(), costo);
+			this.setEstaActivo(false);
+		}
 		
 	}
 	public Double costo(Double precioPorHora) {

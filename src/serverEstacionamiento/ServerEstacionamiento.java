@@ -58,22 +58,27 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 			res = new RespuestaSinSaldo();
 		} else {
 			LocalTime horaInicio = LocalTime.now();
-			LocalTime horaMaxima = this.getControlEstacionamiento().getHoraFin();
-			Double precioPorSegundo = this.getControlEstacionamiento().getPrecioPorHora() / 3600;
-			Integer segundosDebitables =
-				Math.min(
-					LocalTime.of(23, 59, 59).toSecondOfDay() - horaInicio.toSecondOfDay(),
-					(int) (this.getControlSaldo().saldo(nroCelular) / precioPorSegundo));
-			LocalTime horaDebitable = horaInicio.plusSeconds(segundosDebitables);
-			LocalTime horaFin = horaDebitable.isBefore(horaMaxima)
-					? horaDebitable
-					: horaMaxima;
+			LocalTime horaFin = horaFinMaxima(nroCelular, horaInicio);  
 			this.getControlEstacionamiento().registrarEstacionamiento(
 					new EstacionamientoApp(patente, horaInicio, horaFin, nroCelular)
 			);
 			res = new RespuestaInicioEstacionamiento(horaInicio, horaFin);
 		}
 		return res;
+	}
+
+	private LocalTime horaFinMaxima(String nroCelular, LocalTime horaInicio) {
+		LocalTime horaMaxima = this.getControlEstacionamiento().getHoraFin();
+		Double precioPorSegundo = this.getControlEstacionamiento().getPrecioPorHora() / 3600;
+		Integer segundosDebitables =
+			Math.min(
+				LocalTime.of(23, 59, 59).toSecondOfDay() - horaInicio.toSecondOfDay(),
+				(int) (this.getControlSaldo().saldo(nroCelular) / precioPorSegundo));
+		LocalTime horaDebitable = horaInicio.plusSeconds(segundosDebitables);
+		LocalTime horaFin = horaDebitable.isBefore(horaMaxima)
+				? horaDebitable
+				: horaMaxima;
+		return horaFin;
 	}
 
 	@Override
