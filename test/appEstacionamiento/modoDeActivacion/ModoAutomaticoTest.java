@@ -61,7 +61,6 @@ private ModoAutomatico modoAutomatico;
 	
 		verify(app).inicioEstacionamiento();
 		verify(gui, never()).print(any(String.class));
-		
 	}
 	
 	@Test
@@ -83,7 +82,6 @@ private ModoAutomatico modoAutomatico;
 		
 		verify(app).finEstacionamiento();
 		verify(gui, never()).print(any(String.class));
-		
 	}
 
 }
