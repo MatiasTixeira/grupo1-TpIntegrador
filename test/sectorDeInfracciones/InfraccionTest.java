@@ -29,7 +29,7 @@ class InfraccionTest {
 	}
 
 	@Test
-	void testSePuedeAccederALosCamposSeteadosEnElConstructor() {
+	void testSePuedeAccederALosCamposSeteadosEnElConstructorInfraccion() {
 		this.infraccion = new Infraccion(this.patente, this.zona, this.inspector, this.fecha, this.hora);
 
 		assertEquals(this.patente, this.infraccion.getPatente());
