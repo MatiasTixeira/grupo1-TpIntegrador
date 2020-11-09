@@ -24,6 +24,7 @@ class AppEstacionamientoTest {
 	private GPS gps;
 	private GUI gui;
 	
+	
 	@Test
 	void testConstructor() {
 		nroCelular = "123-123-456";

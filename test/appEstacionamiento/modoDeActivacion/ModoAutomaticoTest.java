@@ -5,54 +5,84 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import appEstacionamiento.AppEstacionamiento;
 import appEstacionamiento.GUI;
 import respuestas.Respuesta;
+import sectorDeZonas.SectorDeZonas;
+import sectorDeZonas.ZonaDeEstacionamiento;
 import serverEstacionamiento.IServerEstacionamientoApp;
 
 class ModoAutomaticoTest {
 
 private ModoAutomatico modoAutomatico;
+	IServerEstacionamientoApp server;
+	AppEstacionamiento app;
+	Respuesta respuesta;
+	String nroCelular;
+	String patente;
+	GUI gui;
+
+	@BeforeEach
+	public void setUp() {
+		server = mock(IServerEstacionamientoApp.class);
+		app = mock(AppEstacionamiento.class);
+		respuesta = mock(Respuesta.class);
+		modoAutomatico = new ModoAutomatico();
+		nroCelular = "03-03-456";
+		patente = "AA-22";
+		gui = mock(GUI.class);
+		when(app.inicioEstacionamiento()).thenReturn(respuesta);
+		when(app.finEstacionamiento()).thenReturn(respuesta);
+	}
+
+
+	@Test 
+	void cuandoLeLlegaElMensajeComenzoACaminarElServerIniciaElEstacionamientoYSeEnviaLasRespuestasAlGui() {
+		when(respuesta.respuestaComoString()).thenReturn("Fue exitosa");
+		when(respuesta.operacionExitosa()).thenReturn(true);
+		modoAutomatico.comenzoACaminar(app,gui);
+		
+		verify(app).inicioEstacionamiento();
+		verify(gui).print("Fue exitosa");
+		verify(gui).print("Esta operacion fue realizada de manera automatica");
+
+		
+	}
 	
 	@Test 
-	void cuandoLeLlegaElMensajeComenzoACaminarElServerIniciaElEstacionamientoElServerIniciaElEstacionamientoYSeEnviaLasRespuestasAlGui() {
-		IServerEstacionamientoApp server = mock(IServerEstacionamientoApp.class);
-		String nroCelular = "03-03-456";
-		GUI gui = mock(GUI.class);
-		Respuesta respuesta = mock(Respuesta.class);
-		String patente = "AA-22";
-		when(respuesta.respuestaComoString()).thenReturn("Fue exitosa");
-		when(server.iniciarEstacionamiento(patente, nroCelular)).thenReturn(respuesta);
-		modoAutomatico = new ModoAutomatico();
-		
-		modoAutomatico.comenzoACaminar(server, patente, nroCelular, gui);
-		
-		verify(server).iniciarEstacionamiento(patente, nroCelular);
-		verify(gui).print("Fue exitosa");
-		verify(gui).print("Esta operación fue realizada de manera automática");
-		 
-		
+	void cuandoLeLlegaElMensajeComenzoACaminarYElServerNoIniciaElEstacionamientoYSeEnviaLasRespuestasAlGui() {
+		when(respuesta.operacionExitosa()).thenReturn(false);
+		modoAutomatico.comenzoACaminar(app,gui);
+	
+		verify(app).inicioEstacionamiento();
+		verify(gui, never()).print(any(String.class));
 		
 	}
 	
 	@Test
 	void cuandoLeLlegaElMensajeComenzoAManejarElServerFinalizaElEstacionamientoYSeEnviaLasRespuestasAlGui() {
-		IServerEstacionamientoApp server = mock(IServerEstacionamientoApp.class);
-		String nroCelular = "03-03-456";
-		GUI gui = mock(GUI.class);
-		Respuesta respuesta = mock(Respuesta.class);
-		String patente = "AA-22";
 		when(respuesta.respuestaComoString()).thenReturn("Fue exitosa");
-		when(server.finalizarEstacionamiento(nroCelular)).thenReturn(respuesta);
-		modoAutomatico = new ModoAutomatico();
+		when(respuesta.operacionExitosa()).thenReturn(true);
+		modoAutomatico.comenzoAManejar(app, gui);
 		
-		modoAutomatico.comenzoAManejar(server, nroCelular, gui);
+		verify(app).finEstacionamiento();
+		verify(gui).print("Fue exitosa");
+		verify(gui).print("Esta operacion fue realizada de manera automatica");
 		
-		verify(server).finalizarEstacionamiento(nroCelular);
-		verify(gui).print(respuesta.respuestaComoString());
-		verify(gui).print("Esta operación fue realizada de manera automática");
+	}
+	
+	@Test
+	void cuandoLeLlegaElMensajeComenzoAManejarYElServerNoFinalizaElEstacionamientoYSeEnviaLasRespuestasAlGui() {
+		when(respuesta.operacionExitosa()).thenReturn(false);
+		modoAutomatico.comenzoAManejar(app, gui);
+		
+		verify(app).finEstacionamiento();
+		verify(gui, never()).print(any(String.class));
 		
 	}
 

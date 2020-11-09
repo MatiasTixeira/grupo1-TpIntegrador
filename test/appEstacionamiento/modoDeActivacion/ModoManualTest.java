@@ -3,41 +3,39 @@ package appEstacionamiento.modoDeActivacion;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import appEstacionamiento.AppEstacionamiento;
 import appEstacionamiento.GUI;
-import respuestas.Respuesta;
-import serverEstacionamiento.IServerEstacionamientoApp;
 
 class ModoManualTest {
 	private ModoManual modoManual;
+	AppEstacionamiento app;
+	String nroCelular;
+	String patente;
+	GUI gui;
+	
+	@BeforeEach
+	public void setUp() {
+		app = mock(AppEstacionamiento.class);
+		modoManual = new ModoManual();
+		nroCelular = "03-03-456";
+		patente = "AA-22";
+		gui = mock(GUI.class);
+	}
 	
 	@Test
 	void cuandoLeLlegaElMensajeComenzoACaminarNoHaceNada() {
-		IServerEstacionamientoApp server = mock(IServerEstacionamientoApp.class);
-		String nroCelular = "03-03-456";
-		GUI gui = mock(GUI.class);
-		String patente = "AA-22";
-		modoManual = new ModoManual();
-		
-		modoManual.comenzoACaminar(server, patente, nroCelular, gui);
-		
-		verify(server,never()).iniciarEstacionamiento(any(String.class), any(String.class));
+		modoManual.comenzoACaminar(app, gui);
+		verify(app,never()).iniciarEstacionamiento();
 		verify(gui,never()).print(any(String.class));
-		
-		
 	}
 	
 	@Test
 	void cuandoLeLlegaElMensajeComenzoAManejarNoHaceNada() {
-		IServerEstacionamientoApp server = mock(IServerEstacionamientoApp.class);
-		String nroCelular = "03-03-456";
-		GUI gui = mock(GUI.class);
-		modoManual = new ModoManual();
-		
-		modoManual.comenzoAManejar(server, nroCelular, gui);
-		
-		verify(server,never()).finalizarEstacionamiento(any(String.class));
+		modoManual.comenzoAManejar(app, gui);
+		verify(app,never()).finalizarEstacionamiento();
 		verify(gui,never()).print(any(String.class));
 		
 	}

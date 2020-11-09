@@ -15,7 +15,7 @@ public class ModoAutomatico implements ModoDeActivacion {
 
 		if (res.operacionExitosa()) {
 			gui.print(res.respuestaComoString());
-			gui.print("Esta operación fue realizada de manera automática");
+			gui.print("Esta operacion fue realizada de manera automatica");
 		}
 	}
 
@@ -28,7 +28,7 @@ public class ModoAutomatico implements ModoDeActivacion {
 
 		if (res.operacionExitosa()) {
 			gui.print(res.respuestaComoString());
-			gui.print("Esta operación fue realizada de manera automática");
+			gui.print("Esta operacion fue realizada de manera automatica");
 		}
 	}
 }

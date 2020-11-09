@@ -1,36 +1,38 @@
 package appEstacionamiento.modoDeAlerta;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.never;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import appEstacionamiento.AppEstacionamiento;
 import appEstacionamiento.GUI;
 
 class AlertaDesactivadaTest {
-
-private AlertaDesactivada alertaD;
+	AlertaDesactivada alertaD;
+	GUI gui;
+	AppEstacionamiento app;
 	
+	@BeforeEach
+	public void setUp() {
+		gui = mock(GUI.class);
+		alertaD = new AlertaDesactivada();
+		app = mock(AppEstacionamiento.class);
+}
 	@Test
 	void cuandoComienzaACaminarNoHaceNada() {
-		GUI gui = mock(GUI.class);
-		alertaD = new AlertaDesactivada();
-		
-		alertaD.comenzoACaminar(gui);
-		
-		verify(gui, never()).alert("Deberías comenzar un estacionamiento.");
+		alertaD.comenzoACaminar(app,gui);
+		verify(gui, never()).alert(any(String.class));
 	}
 
 	@Test
 	void cuandoComienzaAManejarNoHaceNada() {
-		GUI gui = mock(GUI.class);
-		alertaD = new AlertaDesactivada();
-		
-		alertaD.comenzoAManejar(gui);
-		
-		verify(gui, never()).alert("Deberías finalizar tu estacionamiento.");
+		alertaD.comenzoAManejar(app,gui);	
+		verify(gui, never()).alert(any(String.class));
 	}
 
 }

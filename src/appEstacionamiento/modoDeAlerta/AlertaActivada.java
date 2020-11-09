@@ -9,13 +9,13 @@ public class AlertaActivada implements ModoDeAlerta {
 	public void comenzoAManejar(AppEstacionamiento app, GUI gui) {
 
 		if (app.puedeFinalizarEstacionamiento())
-			gui.alert("Deberías comenzar un estacionamiento.");
+			gui.alert("Deberias finalizar tu estacionamiento.");
 	}
 
 	@Override
 	public void comenzoACaminar(AppEstacionamiento app, GUI gui) {
 
 		if (app.puedeIniciarEstacionamiento())
-			gui.alert("Deberías comenzar un estacionamiento.");
+			gui.alert("Deberias comenzar un estacionamiento.");
 	}
 }
