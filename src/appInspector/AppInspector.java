@@ -1,14 +1,20 @@
 package appInspector;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import sectorDeEstacionamiento.IControlDeEstacionamiento;
+import sectorDeInfracciones.IRegistroDeInfraccion;
+import sectorDeInfracciones.Infraccion;
+import sectorDeZonas.ZonaDeEstacionamiento;
 
 public class AppInspector {
 
-	//Atributos 
+	//Atributos
 	private String inspector;
 	private IControlDeEstacionamiento controlE;
 	private IRegistroDeInfraccion controlI;
-	
+
 	//Constructor
 	public AppInspector(
 			IControlDeEstacionamiento controlInfraccion,
@@ -18,7 +24,7 @@ public class AppInspector {
 		this.setControlI(controlEstacionamiento);
 		this.setInspector(nombre);
 	}
-	
+
 	//Metodos
 	private void setInspector(String inspector) {
 		this.inspector = inspector;
@@ -35,23 +41,24 @@ public class AppInspector {
 	public Boolean tieneEstacionamientoVigente(String patente) {
 		return this.getControlE().tieneEstacionamientoVigenteConPatente(patente);
 	}
-	
-	public void registrarInfraccion(String patente, String zona) {
-		Infraccion infraccion = new Infraccion(patente, zona, this.getInspector());
+
+	public void registrarInfraccion(String patente, ZonaDeEstacionamiento zona) {
+		Infraccion infraccion = new Infraccion(patente, zona, this.getInspector(), LocalDate.now(), LocalTime.now());
+
 		this.getControlI().registrar(infraccion);
 	}
 
-	public String getInspector() {
+	private String getInspector() {
 		return inspector;
 	}
 
-	public IControlDeEstacionamiento getControlE() {
+	private IControlDeEstacionamiento getControlE() {
 		return controlE;
 	}
 
-	public IRegistroDeInfraccion getControlI() {
+	private IRegistroDeInfraccion getControlI() {
 		return controlI;
 	}
-	
+
 }
 

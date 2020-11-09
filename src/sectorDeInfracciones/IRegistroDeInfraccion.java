@@ -1,4 +1,4 @@
-package appInspector;
+package sectorDeInfracciones;
 
 public interface IRegistroDeInfraccion {
 
