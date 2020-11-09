@@ -31,40 +31,24 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 
 	}
 
-	public IControlDeEstacionamiento getControlEstacionamiento() {
+	private IControlDeEstacionamiento getControlEstacionamiento() {
 		return this.controlEstacionamiento;
 	}
 
-	public void setControlEstacionamiento(IControlDeEstacionamiento controlEstacionamiento) {
+	private void setControlEstacionamiento(IControlDeEstacionamiento controlEstacionamiento) {
 		this.controlEstacionamiento = controlEstacionamiento;
 	}
 
-	public IControlSaldo getControlSaldo() {
+	private IControlSaldo getControlSaldo() {
 		return this.controlSaldo;
 	}
 
-	public void setControlSaldo(IControlSaldo controlSaldo) {
+	private void setControlSaldo(IControlSaldo controlSaldo) {
 		this.controlSaldo = controlSaldo;
 	}
 
-	public IControlZonas getControlZonas() {
+	private IControlZonas getControlZonas() {
 		return this.controlZonas;
-	}
-
-	@Override
-	public Respuesta iniciarEstacionamiento(String nroCelular, String patente) {
-		Respuesta res;
-		if (this.getControlSaldo().saldo(nroCelular) <= 0) {
-			res = new RespuestaSinSaldo();
-		} else {
-			LocalTime horaInicio = LocalTime.now();
-			LocalTime horaFin = horaFinMaxima(nroCelular, horaInicio);  
-			this.getControlEstacionamiento().registrarEstacionamiento(
-					new EstacionamientoApp(patente, horaInicio, horaFin, nroCelular)
-			);
-			res = new RespuestaInicioEstacionamiento(horaInicio, horaFin);
-		}
-		return res;
 	}
 
 	private LocalTime horaFinMaxima(String nroCelular, LocalTime horaInicio) {
@@ -82,15 +66,31 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 	}
 
 	@Override
+	public Respuesta iniciarEstacionamiento(String nroCelular, String patente) {
+		Respuesta res;
+		if (this.getControlSaldo().saldo(nroCelular) <= 0) {
+			res = new RespuestaSinSaldo();
+		} else {
+			LocalTime horaInicio = LocalTime.now();
+			LocalTime horaFin = horaFinMaxima(nroCelular, horaInicio);
+			this.getControlEstacionamiento().registrarEstacionamiento(
+					new EstacionamientoApp(patente, horaInicio, horaFin, nroCelular)
+			);
+			res = new RespuestaInicioEstacionamiento(horaInicio, horaFin);
+		}
+		return res;
+	}
+
+	@Override
 	public Respuesta finalizarEstacionamiento(String nroCelular) {
 
 		EstacionamientoApp estacionamiento = (EstacionamientoApp) this.getControlEstacionamiento().estacionamientoVigente(nroCelular);
 		estacionamiento.finalizar(this.getControlSaldo(), this.getControlEstacionamiento().getPrecioPorHora());
 
 		return new RespuestaFinEstacionamiento(
-				estacionamiento.getHoraInicio(), 
-				estacionamiento.getHoraFin(), 
-				estacionamiento.cantidadDeHoras(), 
+				estacionamiento.getHoraInicio(),
+				estacionamiento.getHoraFin(),
+				estacionamiento.cantidadDeHoras(),
 				estacionamiento.costo(this.getControlEstacionamiento().getPrecioPorHora()));
 	}
 
