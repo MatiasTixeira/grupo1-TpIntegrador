@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 import estacionamiento.Estacionamiento;
+import sectorDeSaldos.IControlSaldo;
 
 public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 
@@ -11,12 +12,14 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 	private LocalTime horaInicio;
 	private LocalTime horaFin;
 	private Double precioPorHora;
+	private IControlSaldo controlSaldo;
 
-	public SectorDeEstacionamiento(LocalTime horaInicio, LocalTime horaFin, Double precioPorHora) {
+	public SectorDeEstacionamiento(LocalTime horaInicio, LocalTime horaFin, Double precioPorHora,IControlSaldo controlSaldo) {
 		this.setHoraFin(horaFin);
 		this.setHoraInicio(horaInicio);
 		this.setPrecioPorHora(precioPorHora);
 		this.setEstacionamientos(new ArrayList<Estacionamiento>());
+		this.setControlSaldo(controlSaldo);
 	}
 
 	private void setEstacionamientos(ArrayList<Estacionamiento> estacionamientos) {
@@ -55,9 +58,17 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 	@Override
 	public void finalizarTodosLosEstacionamientos() {
 		for (Estacionamiento estacionamiento : this.getEstacionamientos()) {
-			estacionamiento.finalizar();
+			estacionamiento.finalizar(this.getControlSaldo(), this.getPrecioPorHora());
 		}
 
+	}
+
+	public IControlSaldo getControlSaldo() {
+		return controlSaldo;
+	}
+
+	public void setControlSaldo(IControlSaldo controlSaldo) {
+		this.controlSaldo = controlSaldo;
 	}
 
 	@Override
