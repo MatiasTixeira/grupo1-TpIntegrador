@@ -78,10 +78,6 @@ class ServerDeEstacionamientoTest {
 		//Si no ponemos por horas falla por milisegundos
 	}	
 
-	//Integer horaFinal = 
-    //		controlEstacionamiento.getHoraFin().getHour() - LocalTime.now().getHour();
-	
-	
 	@Test
 	void elServerPuedeIniciarUnEstacionamientoPeroSiNoTieneSaldoEsteDevuelveUnaRespuestaSinSaldo() {
 		String celu = "1124600909";
@@ -91,10 +87,7 @@ class ServerDeEstacionamientoTest {
 				(RespuestaSinSaldo) server.iniciarEstacionamiento(celu,patente);
 		assertEquals(res.respuestaComoString(),"Saldo insuficiente. Estacionamiento no permitido.");
 	}
-	
-	
-	
-	
+
 	@Test
 	void cuandoUnEstacionamientoEstaEnZonaDeEstacionamientosEsteRetornaTrue() {
 		Ubicacion ubicacion = mock(Ubicacion.class);
