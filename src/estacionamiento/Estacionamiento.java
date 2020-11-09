@@ -2,6 +2,8 @@ package estacionamiento;
 
 import java.time.LocalTime;
 
+import sectorDeSaldos.IControlSaldo;
+
 public abstract class Estacionamiento {
 	private  String patente;
 	private  LocalTime horaInicio;
@@ -52,11 +54,15 @@ public abstract class Estacionamiento {
 
 	public Boolean estaVigente() {
 		Boolean estaVigente = LocalTime.now().isBefore(this.getHoraFin()) 
-				&& this.estaActivo;
+				&& this.getEstaActivo();
 		return estaVigente ;
 	}
 	
-	public abstract void finalizar();
+	public Boolean getEstaActivo() {
+		return estaActivo;
+	}
+
+	public abstract void finalizar(IControlSaldo iControlSaldo,Double precioPorHora);
 		
 	public void setEstaActivo(Boolean estaActivo) {
 		this.estaActivo = estaActivo;

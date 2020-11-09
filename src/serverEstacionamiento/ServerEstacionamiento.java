@@ -3,7 +3,6 @@ package serverEstacionamiento;
 import java.time.LocalTime;
 
 import espacioGeografico.Ubicacion;
-import estacionamiento.Estacionamiento;
 import estacionamiento.EstacionamientoApp;
 import respuestas.Respuesta;
 import respuestas.RespuestaFinEstacionamiento;
@@ -80,19 +79,14 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 	@Override
 	public Respuesta finalizarEstacionamiento(String nroCelular) {
 
-		Estacionamiento estacionamiento = this.getControlEstacionamiento().estacionamientoVigente(nroCelular);
-		estacionamiento.finalizar();
+		EstacionamientoApp estacionamiento = (EstacionamientoApp) this.getControlEstacionamiento().estacionamientoVigente(nroCelular);
+		estacionamiento.finalizar(this.getControlSaldo(), this.getControlEstacionamiento().getPrecioPorHora());
 
-		LocalTime horaInicio = estacionamiento.getHoraInicio();
-		LocalTime horaFin = estacionamiento.getHoraFin();
-
-		Integer segundosCobrados = horaFin.toSecondOfDay() - horaInicio.toSecondOfDay();
-		Double precioPorSegundo = this.getControlEstacionamiento().getPrecioPorHora() / 3600;
-
-		Integer cantHoras = horaFin.getHour() - horaInicio.getHour();
-		Double costo = segundosCobrados * precioPorSegundo;
-
-		return new RespuestaFinEstacionamiento(horaInicio, horaFin, cantHoras, costo);
+		return new RespuestaFinEstacionamiento(
+				estacionamiento.getHoraInicio(), 
+				estacionamiento.getHoraFin(), 
+				estacionamiento.cantidadDeHoras(), 
+				estacionamiento.costo(this.getControlEstacionamiento().getPrecioPorHora()));
 	}
 
 	@Override

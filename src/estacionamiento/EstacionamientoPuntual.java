@@ -3,6 +3,7 @@ package estacionamiento;
 import java.time.LocalTime;
 
 import compras.CompraPuntual;
+import sectorDeSaldos.IControlSaldo;
 
 public class EstacionamientoPuntual extends Estacionamiento {
 
@@ -29,7 +30,7 @@ public class EstacionamientoPuntual extends Estacionamiento {
 		return false;
 	}
 	@Override
-	public void finalizar() {
+	public void finalizar(IControlSaldo controlSaldo, Double precioPorHora) {
 		this.setEstaActivo(false);
 		
 	}

@@ -2,6 +2,8 @@ package estacionamiento;
 
 import java.time.LocalTime;
 
+import sectorDeSaldos.IControlSaldo;
+
 public class EstacionamientoApp extends Estacionamiento {
 	private String numeroCelular;
 	
@@ -28,10 +30,24 @@ public class EstacionamientoApp extends Estacionamiento {
 	}
 	
 	@Override 
-	public void finalizar() {
+	public void finalizar(IControlSaldo controlSaldo, Double precioPorHora) {
 		this.setEstaActivo(false);
 		this.setHoraFin(LocalTime.now());
+		Double costo = this.costo(precioPorHora);
+		controlSaldo.descontar(this.getNumeroCelular(), costo);
 		
+	}
+	public Double costo(Double precioPorHora) {
+		LocalTime horaInicio = this.getHoraInicio();
+		LocalTime horaFin = this.getHoraFin();
+
+		Integer segundosCobrados = horaFin.toSecondOfDay() - horaInicio.toSecondOfDay();
+		Double precioPorSegundo = precioPorHora / 3600;
+		Double costo = segundosCobrados * precioPorSegundo;
+		return costo;
+	}
+	public Integer cantidadDeHoras() {
+		return Math.min(1, (this.getHoraFin().getHour() - this.getHoraInicio().getHour()));
 	}
 	
 }
