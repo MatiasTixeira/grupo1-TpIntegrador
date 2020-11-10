@@ -174,6 +174,7 @@ public class AppEstacionamiento implements MovementSensor {
 	}
 
 	private boolean estaEnHorario() {
+		//Creo que esta en sector de estacionamiento.
 		return LocalTime.now().isBefore(this.getServer().getHoraFin())
 				&& LocalTime.now().isAfter(this.getServer().getHoraInicio());
 	}
