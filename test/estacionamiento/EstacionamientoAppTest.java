@@ -1,11 +1,14 @@
 package estacionamiento;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 import java.time.LocalTime;
 
 import org.junit.jupiter.api.Test;
+
+import sectorDeSaldos.IControlSaldo;
 
 
 
@@ -30,13 +33,13 @@ class EstacionamientoAppTest {
 	}
 	
 	@Test
-	void cuandoFinalizaDejaDeEstarVigenteYSeteaLaHoraFin() {
-		
+	void cuandoFinalizaDejaDeEstarVigenteYSeteaLaHoraFinYLeAvisaAlControlDeSaldoCuantoDebeDescontar() {
+		IControlSaldo controlSaldo = mock(IControlSaldo.class);
 		estacionamiento = 
 				new EstacionamientoApp("AAA-111",LocalTime.of(10, 0),LocalTime.of(20, 0),"03-03-456");
 		assertTrue(estacionamiento.estaVigente());
 		
-		estacionamiento.finalizar();
+		estacionamiento.finalizar(controlSaldo,40d);
 		
 		assertFalse(estacionamiento.estaVigente());
 		assertEquals(LocalTime.now().getHour(), estacionamiento.getHoraFin().getHour());

@@ -12,18 +12,21 @@ import java.time.LocalTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import estacionamiento.EstacionamientoApp;
 import estacionamiento.EstacionamientoPuntual;
+import sectorDeSaldos.IControlSaldo;
 
 class SectorDeEstacionamientoTest {
 	private SectorDeEstacionamiento sectorDeEstacionamiento;
+	private IControlSaldo controlDesaldo;
 	@BeforeEach
-
 	public void setUp() {
+		controlDesaldo = mock(IControlSaldo.class);
 		sectorDeEstacionamiento =
-			new SectorDeEstacionamiento(LocalTime.of(8, 0), LocalTime.of(20, 0), 40d);
+			new SectorDeEstacionamiento(LocalTime.of(8, 0), LocalTime.of(20, 0), 40d,controlDesaldo);
 
 	}
 	@Test
@@ -103,19 +106,27 @@ class SectorDeEstacionamientoTest {
 		//finalizo los estacionamientos
 		sectorDeEstacionamiento.finalizarTodosLosEstacionamientos();
 		//verifico que hayan finalizado
-		verify(estacionamiento).finalizar();
-		verify(estacionamiento2).finalizar();
+		verify(estacionamiento).finalizar(sectorDeEstacionamiento.getControlSaldo()
+										,sectorDeEstacionamiento.getPrecioPorHora());
+		verify(estacionamiento2).finalizar(sectorDeEstacionamiento.getControlSaldo()
+										,sectorDeEstacionamiento.getPrecioPorHora());
 	}
 
 	@Test
 	void horarioDeEstacionamiento() {
-		SectorDeEstacionamiento spySectorDeEstacionamiento = spy(sectorDeEstacionamiento);
-		when(spySectorDeEstacionamiento.horaActual())
-			.thenReturn(LocalTime.of(10, 0),LocalTime.of(10, 0)
-						,LocalTime.of(22, 0),LocalTime.of(22, 0)
-						,LocalTime.of(6, 0),LocalTime.of(6, 0));
-		assertTrue(spySectorDeEstacionamiento.esHorarioDeEstacionamiento());
-		assertFalse(spySectorDeEstacionamiento.esHorarioDeEstacionamiento());
-		assertFalse(spySectorDeEstacionamiento.esHorarioDeEstacionamiento());
+		LocalTime las11Horas = LocalTime.of(11, 0);
+		LocalTime las21Horas = LocalTime.of(21, 0);
+		LocalTime las6Horas = LocalTime.of(6, 0);
+		try(MockedStatic<LocalTime> localTimeMock = Mockito.mockStatic(LocalTime.class, Mockito.CALLS_REAL_METHODS)) {
+			
+			localTimeMock.when(LocalTime::now).thenReturn(
+					las11Horas,las11Horas,
+					las21Horas,las21Horas,
+					las6Horas,las6Horas);
+		
+		assertTrue(sectorDeEstacionamiento.esHorarioDeEstacionamiento());
+		assertFalse(sectorDeEstacionamiento.esHorarioDeEstacionamiento());
+		assertFalse(sectorDeEstacionamiento.esHorarioDeEstacionamiento());
+		}
 	}
 }

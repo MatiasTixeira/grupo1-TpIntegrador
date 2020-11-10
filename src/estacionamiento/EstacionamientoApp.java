@@ -35,6 +35,7 @@ public class EstacionamientoApp extends Estacionamiento {
 			LocalTime horaFin = LocalTime.now().isBefore(this.getHoraFin())
 					? LocalTime.now()
 					: this.getHoraFin();
+			
 			this.setHoraFin(horaFin);
 			Double costo = this.costo(precioPorHora);
 			controlSaldo.descontar(this.getNumeroCelular(), costo);

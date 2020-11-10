@@ -75,16 +75,13 @@ public class SectorDeEstacionamiento implements ISectorDeEstacionamiento {
 	public Boolean esHorarioDeEstacionamiento() {
 
 		Boolean esHorarioDeEstacionamiento =
-				horaActual().isAfter(this.getHoraInicio()) &&
-				horaActual().isBefore(this.getHoraFin());
+				LocalTime.now().isAfter(this.getHoraInicio()) &&
+				LocalTime.now().isBefore(this.getHoraFin());
 
 		return esHorarioDeEstacionamiento;
 	}
 	
-	public LocalTime horaActual() {
-		return LocalTime.now();
-	}
-
+ 
 	public LocalTime getHoraInicio() {
 		return horaInicio;
 	}
