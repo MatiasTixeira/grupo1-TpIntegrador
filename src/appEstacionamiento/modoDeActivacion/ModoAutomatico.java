@@ -11,7 +11,7 @@ public class ModoAutomatico implements ModoDeActivacion {
 			AppEstacionamiento app,
 			GUI gui) {
 
-		Respuesta res = app.finEstacionamiento();
+		Respuesta res = app.respuestaFin();
 
 		if (res.operacionExitosa()) {
 			gui.print(res.respuestaComoString());
@@ -24,7 +24,7 @@ public class ModoAutomatico implements ModoDeActivacion {
 			AppEstacionamiento app,
 			GUI gui) {
 
-		Respuesta res = app.inicioEstacionamiento();
+		Respuesta res = app.respuestaInicio();
 
 		if (res.operacionExitosa()) {
 			gui.print(res.respuestaComoString());

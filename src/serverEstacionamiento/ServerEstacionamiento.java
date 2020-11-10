@@ -114,4 +114,10 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 		return this.getControlEstacionamiento().getHoraInicio();
 	}
 
+	@Override 
+	public Boolean estaEnHorario() {
+		return LocalTime.now().isBefore(this.getHoraFin())
+				&& LocalTime.now().isAfter(this.getHoraInicio());
+	}
 }
+

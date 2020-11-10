@@ -3,6 +3,9 @@ package appEstacionamiento;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalTime;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import appEstacionamiento.estadoDeMoviemiento.EstadoDeMovimiento;
@@ -11,7 +14,11 @@ import appEstacionamiento.modoDeAlerta.ModoDeAlerta;
 import espacioGeografico.GPS;
 import espacioGeografico.Ubicacion;
 import respuestas.Respuesta;
+import sectorDeEstacionamiento.IControlDeEstacionamiento;
+import sectorDeSaldos.IControlSaldo;
+import sectorDeZonas.IControlZonas;
 import serverEstacionamiento.IServerEstacionamientoApp;
+import serverEstacionamiento.ServerEstacionamiento;
 
 class AppEstacionamientoTest {
 	private AppEstacionamiento appE;
@@ -23,20 +30,28 @@ class AppEstacionamientoTest {
 	private IServerEstacionamientoApp server;
 	private GPS gps;
 	private GUI gui;
+	private Ubicacion ubicacionInicial;
+	private Respuesta res;
 	
-	
-	@Test
-	void testConstructor() {
-		nroCelular = "123-123-456";
-		patente = "AA-11";
+	@BeforeEach
+	public void setUp() {
 		estadoDeMovimiento = mock(EstadoDeMovimiento.class);
 		modoDeAlerta = mock(ModoDeAlerta.class);
 		modoDeActivacion = mock(ModoDeActivacion.class);
 		server = mock(IServerEstacionamientoApp.class);
+		nroCelular = "123-123-456";
+		patente = "AA-11";
 		gps = mock(GPS.class);
 		gui = mock(GUI.class);
+		res = mock(Respuesta.class);
 		appE = new AppEstacionamiento(nroCelular,patente,estadoDeMovimiento
-									,modoDeAlerta,modoDeActivacion,server,gps,gui);
+				,modoDeAlerta,modoDeActivacion,server,gps,gui);
+		ubicacionInicial = mock(Ubicacion.class);
+		when(gps.ubicacionActual()).thenReturn(this.ubicacionInicial);
+	}
+	
+	@Test
+	void testConstructor() {
 		
 		assertEquals(nroCelular, appE.getNroCelular());
 		assertEquals(patente, appE.getPatente());
@@ -49,94 +64,87 @@ class AppEstacionamientoTest {
 	}
 	
 	@Test
-	void cuandoIniciaEstacionamientoLeEnviaAlServerElInicio_AlGuiLaRespuesta_YSeGuardaLaUbicacion() {
-		nroCelular = "123-123-456";
-		patente = "AA-11";
-		estadoDeMovimiento = mock(EstadoDeMovimiento.class);
-		modoDeAlerta = mock(ModoDeAlerta.class);
-		modoDeActivacion = mock(ModoDeActivacion.class);
-		server = mock(IServerEstacionamientoApp.class);
-		gps = mock(GPS.class);
-		gui = mock(GUI.class);
-		Respuesta respuesta = mock(Respuesta.class);
-		Ubicacion ub= mock(Ubicacion.class);
-		when(respuesta.respuestaComoString()).thenReturn("Fue exitosa");
-		when(server.iniciarEstacionamiento(nroCelular, patente))
-			.thenReturn(respuesta);
-		when(gps.ubicacionActual()).thenReturn(ub);
-		
-		appE = new AppEstacionamiento(nroCelular,patente,estadoDeMovimiento
-									,modoDeAlerta,modoDeActivacion,server,gps,gui);
-		
-		appE.iniciarEstacionamiento();
-		
+	void respuestaInicioCuandoPuedeIniciarUnEstacionamientoLeEnviaAlServerElInicio_AlGuiLaRespuesta_YSeGuardaLaUbicacionCuandoLaRespuestaEsExitosa() {
+		when(server.tieneEstacionamientoVigente(patente)).thenReturn(false);
+		when(server.estaEnZonaDeEstacionamiento(ubicacionInicial)).thenReturn(true);
+		when(server.estaEnHorario()).thenReturn(true);
+		when(server.iniciarEstacionamiento(nroCelular, patente)).thenReturn(res);
+		when(res.operacionExitosa()).thenReturn(true);
+		appE.respuestaInicio();
 		verify(appE.getServer()).iniciarEstacionamiento(appE.getNroCelular(), appE.getPatente());
-		verify(appE.getGui()).print("Fue exitosa");
-		assertEquals(ub, appE.getUltimaUbicacionEst());
-		
+		assertEquals(ubicacionInicial, appE.getUltimaUbicacionEst());
 	}
 	
 	@Test
-	void cuandoFinalizaElEstacionamientoLeAvisaAlServerQueFinalizaYEnviaLaRespuestaAlGui() {
-		nroCelular = "123-123-456";
-		patente = "AA-11";
-		estadoDeMovimiento = mock(EstadoDeMovimiento.class);
-		modoDeAlerta = mock(ModoDeAlerta.class);
-		modoDeActivacion = mock(ModoDeActivacion.class);
-		server = mock(IServerEstacionamientoApp.class);
-		gps = mock(GPS.class);
-		gui = mock(GUI.class);
+	void respuestaInicioCambiaLaUltimaUbicacionCuandoLaRespuestaEsExitosa() {
+		when(server.tieneEstacionamientoVigente(patente)).thenReturn(true,false,true);
+		when(server.estaEnZonaDeEstacionamiento(ubicacionInicial)).thenReturn(true);
+		when(server.estaEnHorario()).thenReturn(true);
+		when(server.iniciarEstacionamiento(nroCelular, patente)).thenReturn(res);
+		when(res.operacionExitosa()).thenReturn(true);
+		appE.respuestaInicio();
+		appE.respuestaFin();
+		Ubicacion ubi2 = mock(Ubicacion.class);
+		when(this.gps.ubicacionActual()).thenReturn(ubi2);
+		when(server.estaEnZonaDeEstacionamiento(ubi2)).thenReturn(true);
+		appE.respuestaInicio();
+		verify(appE.getServer()).iniciarEstacionamiento(appE.getNroCelular(), appE.getPatente());
+		assertNotEquals(ubicacionInicial, appE.getUltimaUbicacionEst());
+	}
+	
+	//------------------
+	
+	
+	
+	
+	@Test
+	void respuestaFinCuandoPuedeFinzalizarUnEstacionamientoLeAvisaAlServerQueFinaliza() {
 		Respuesta respuesta = mock(Respuesta.class);
+		
 		when(respuesta.respuestaComoString()).thenReturn("Fue exitosa");
 		when(server.finalizarEstacionamiento(nroCelular))
 			.thenReturn(respuesta);
-		
-		appE = new AppEstacionamiento(nroCelular,patente,estadoDeMovimiento
-									,modoDeAlerta,modoDeActivacion,server,gps,gui);
-		
-		appE.finalizarEstacionamiento();
+		when(server.tieneEstacionamientoVigente(patente)).thenReturn(false,true);
+		when(server.estaEnZonaDeEstacionamiento(ubicacionInicial)).thenReturn(true);
+		when(server.estaEnHorario()).thenReturn(true);
+		when(server.iniciarEstacionamiento(nroCelular, patente)).thenReturn(res);
+		when(res.operacionExitosa()).thenReturn(true);
+		appE.respuestaInicio();
+		appE.respuestaFin();
 		
 		verify(appE.getServer()).finalizarEstacionamiento(appE.getNroCelular());
-		verify(appE.getGui()).print("Fue exitosa");
 		}
 	
-		@Test
-		void cuandoLeLlegaElMensajeDrivingSeLoEnviaASuEstadoDeMovimientoActual() {
-		nroCelular = "123-123-456";
-		patente = "AA-11";
-		estadoDeMovimiento = mock(EstadoDeMovimiento.class);
-		modoDeAlerta = mock(ModoDeAlerta.class);
-		modoDeActivacion = mock(ModoDeActivacion.class);
-		server = mock(IServerEstacionamientoApp.class);
-		gps = mock(GPS.class);
-		gui = mock(GUI.class);
-		appE = new AppEstacionamiento(nroCelular,patente,estadoDeMovimiento
-									,modoDeAlerta,modoDeActivacion,server,gps,gui);
+	// falta hacerlo
+	@Test
+	void respuestaFinCuandoNoPuedeFinzalizarUnEstacionamientoLeAvisaAlServerQueFinaliza() {
+		Respuesta respuesta = mock(Respuesta.class);
 		
+		when(respuesta.respuestaComoString()).thenReturn("Fue exitosa");
+		when(server.finalizarEstacionamiento(nroCelular))
+			.thenReturn(respuesta);
+		when(server.tieneEstacionamientoVigente(patente)).thenReturn(false,true);
+		when(server.estaEnZonaDeEstacionamiento(ubicacionInicial)).thenReturn(true);
+		when(server.estaEnHorario()).thenReturn(true);
+		when(server.iniciarEstacionamiento(nroCelular, patente)).thenReturn(res);
+		when(res.operacionExitosa()).thenReturn(true);
+		appE.respuestaInicio();
+		appE.respuestaFin();
+		
+		verify(appE.getServer()).finalizarEstacionamiento(appE.getNroCelular());
+		}
+	
+	@Test
+	void cuandoLeLlegaElMensajeDrivingSeLoEnviaASuEstadoDeMovimientoActual() {	
 		appE.driving();
-		
 		verify(estadoDeMovimiento).isDriving();
-		}
+	}
 		
-		@Test
-		void cuandoLeLlegaElMensajeWalkinSeLoEnviaASuEstadoDeMovimientoActual() {
-			nroCelular = "123-123-456";
-			patente = "AA-11";
-			estadoDeMovimiento = mock(EstadoDeMovimiento.class);
-			modoDeAlerta = mock(ModoDeAlerta.class);
-			modoDeActivacion = mock(ModoDeActivacion.class);
-			server = mock(IServerEstacionamientoApp.class);
-			gps = mock(GPS.class);
-			gui = mock(GUI.class);
-			appE = new AppEstacionamiento(nroCelular,patente,estadoDeMovimiento
-										,modoDeAlerta,modoDeActivacion,server,gps,gui);
-			
-			appE.walking();
-			
-			verify(estadoDeMovimiento).isWalking();
-			
-		}
-		
+	@Test
+	void cuandoLeLlegaElMensajeWalkinSeLoEnviaASuEstadoDeMovimientoActual() {	
+		appE.walking();	
+		verify(estadoDeMovimiento).isWalking();	
+	}
 	
-
+	
 }

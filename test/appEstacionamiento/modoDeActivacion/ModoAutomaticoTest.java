@@ -36,8 +36,8 @@ private ModoAutomatico modoAutomatico;
 		nroCelular = "03-03-456";
 		patente = "AA-22";
 		gui = mock(GUI.class);
-		when(app.inicioEstacionamiento()).thenReturn(respuesta);
-		when(app.finEstacionamiento()).thenReturn(respuesta);
+		when(app.respuestaInicio()).thenReturn(respuesta);
+		when(app.respuestaFin()).thenReturn(respuesta);
 	}
 
 
@@ -47,7 +47,7 @@ private ModoAutomatico modoAutomatico;
 		when(respuesta.operacionExitosa()).thenReturn(true);
 		modoAutomatico.comenzoACaminar(app,gui);
 		
-		verify(app).inicioEstacionamiento();
+		verify(app).respuestaInicio();
 		verify(gui).print("Fue exitosa");
 		verify(gui).print("Esta operacion fue realizada de manera automatica");
 
@@ -59,7 +59,7 @@ private ModoAutomatico modoAutomatico;
 		when(respuesta.operacionExitosa()).thenReturn(false);
 		modoAutomatico.comenzoACaminar(app,gui);
 	
-		verify(app).inicioEstacionamiento();
+		verify(app).respuestaInicio();
 		verify(gui, never()).print(any(String.class));
 	}
 	
@@ -69,7 +69,7 @@ private ModoAutomatico modoAutomatico;
 		when(respuesta.operacionExitosa()).thenReturn(true);
 		modoAutomatico.comenzoAManejar(app, gui);
 		
-		verify(app).finEstacionamiento();
+		verify(app).respuestaFin();
 		verify(gui).print("Fue exitosa");
 		verify(gui).print("Esta operacion fue realizada de manera automatica");
 		
@@ -80,7 +80,7 @@ private ModoAutomatico modoAutomatico;
 		when(respuesta.operacionExitosa()).thenReturn(false);
 		modoAutomatico.comenzoAManejar(app, gui);
 		
-		verify(app).finEstacionamiento();
+		verify(app).respuestaFin();
 		verify(gui, never()).print(any(String.class));
 	}
 

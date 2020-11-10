@@ -19,6 +19,8 @@ public interface IServerEstacionamientoApp {
 
 	public LocalTime getHoraInicio();
 
+	public Boolean estaEnHorario();
+
 
 
 }

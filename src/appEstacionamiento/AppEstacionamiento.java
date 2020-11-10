@@ -30,7 +30,7 @@ public class AppEstacionamiento implements MovementSensor {
 			ModoDeActivacion modoAct,
 			IServerEstacionamientoApp server,
 			GPS gps,
-			GUI gui) {
+			GUI gui){
 
 		this.setModoDeAlerta(modoDeAlerta);
 		this.setModoDeActivacion(modoAct);
@@ -46,7 +46,7 @@ public class AppEstacionamiento implements MovementSensor {
 		return this.nroCelular;
 	}
 
-	public void setNroCelular(String nroCelular) {
+	private void setNroCelular(String nroCelular) {
 		this.nroCelular = nroCelular;
 	}
 
@@ -54,7 +54,7 @@ public class AppEstacionamiento implements MovementSensor {
 		return this.patente;
 	}
 
-	public void setPatente(String patente) {
+	private void setPatente(String patente) {
 		this.patente = patente;
 	}
 
@@ -124,33 +124,32 @@ public class AppEstacionamiento implements MovementSensor {
 		this.getEstadoDeMovimiento().isWalking();
 	}
 
+	//------------------
+	
+	
 	public void iniciarEstacionamiento() {
-		this.getGui().print(this.inicioEstacionamiento().respuestaComoString());
+		this.getGui().print(this.respuestaInicio().respuestaComoString());
 	}
 
-	public Respuesta inicioEstacionamiento() {
+	public Respuesta respuestaInicio() {
 		Respuesta respuesta = this.puedeIniciarEstacionamiento()
 			? this.getServer().iniciarEstacionamiento(this.getNroCelular(), this.getPatente())
 			: new RespuestaOperacionFallida();
-
-		this.setUltimaUbicacionEst(respuesta.operacionExitosa()
-			? this.getGps().ubicacionActual()
-			: this.getUltimaUbicacionEst());
-
+		if (respuesta.operacionExitosa()) this.setUltimaUbicacionEst(this.getGps().ubicacionActual());
 		return respuesta;
 	}
 
 	public void finalizarEstacionamiento() {
-		this.getGui().print(this.finEstacionamiento().respuestaComoString());
+		this.getGui().print(this.respuestaFin().respuestaComoString());
 	}
 
-	public Respuesta finEstacionamiento() {
-
+	public Respuesta respuestaFin() {
 		return this.puedeFinalizarEstacionamiento()
 			? this.getServer().finalizarEstacionamiento(this.getNroCelular())
 			: new RespuestaOperacionFallida();
 	}
 
+	
 	public void comenzoACaminar() {
 
 		this.getModoDeAlerta().comenzoACaminar(this, this.getGui());
@@ -173,10 +172,9 @@ public class AppEstacionamiento implements MovementSensor {
 		return this.getServer().tieneEstacionamientoVigente(this.getPatente());
 	}
 
-	private boolean estaEnHorario() {
+	private Boolean estaEnHorario() {
 		//Creo que esta en sector de estacionamiento.
-		return LocalTime.now().isBefore(this.getServer().getHoraFin())
-				&& LocalTime.now().isAfter(this.getServer().getHoraInicio());
+		return this.getServer().estaEnHorario();
 	}
 
 	private Ubicacion ubicacionActual() {
