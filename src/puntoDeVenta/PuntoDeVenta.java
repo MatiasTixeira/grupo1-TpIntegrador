@@ -1,5 +1,6 @@
 package puntoDeVenta;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 import compras.CompraPuntual;
@@ -28,12 +29,12 @@ public class PuntoDeVenta {
 
 	//metodos
 	public void comprarCredito(String num, Double monto) {
-		CompraSaldo compra = new CompraSaldo(this,monto,num);
+		CompraSaldo compra = new CompraSaldo(this,monto,num, LocalDate.now(), LocalTime.now());
 		this.getControlCom().registrar(compra);
 		this.getControlSal().cargarSaldo(num, monto);
 	}
 
-	public Integer comprarEstacionamiento(String patente, Integer cantHoras) {
+	public EstacionamientoPuntual comprarEstacionamiento(String patente, Integer cantHoras) {
 
 		LocalTime horaActual = LocalTime.now();
 		LocalTime horaMaxima = this.getControlEst().getHoraFin();
@@ -43,36 +44,36 @@ public class PuntoDeVenta {
 				? horaDebitable
 				: horaMaxima;
 
-		CompraPuntual compra = new CompraPuntual(this,horasCompradas);
+		CompraPuntual compra = new CompraPuntual(this, horasCompradas, LocalDate.now(), LocalTime.now());
 		this.getControlCom().registrar(compra);
 
 		EstacionamientoPuntual est = new EstacionamientoPuntual(
 				patente, horaActual, horaFin, compra);
 		this.getControlEst().registrarEstacionamiento(est);
-		return horasCompradas;
+		return est;
 	}
 
-	public IControlSaldo getControlSal() {
+	private IControlSaldo getControlSal() {
 		return controlSal;
 	}
 
-	public void setControlSal(IControlSaldo controlSal) {
+	private void setControlSal(IControlSaldo controlSal) {
 		this.controlSal = controlSal;
 	}
 
-	public IControlDeEstacionamiento getControlEst() {
+	private IControlDeEstacionamiento getControlEst() {
 		return controlEst;
 	}
 
-	public void setControlEst(IControlDeEstacionamiento controlEst) {
+	private void setControlEst(IControlDeEstacionamiento controlEst) {
 		this.controlEst = controlEst;
 	}
 
-	public IRegistroCompras getControlCom() {
+	private IRegistroCompras getControlCom() {
 		return controlCom;
 	}
 
-	public void setControlCom(IRegistroCompras controlCom) {
+	private void setControlCom(IRegistroCompras controlCom) {
 		this.controlCom = controlCom;
 	}
 }
