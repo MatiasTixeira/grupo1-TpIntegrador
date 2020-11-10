@@ -2,12 +2,16 @@ package puntoDeVenta;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import compras.CompraPuntual;
 import compras.CompraSaldo;
@@ -21,6 +25,7 @@ class PuntoDeVentaTest {
 	IControlDeEstacionamiento ctrlEst;
 	IRegistroCompras regis;
 	IControlSaldo ctrlSal;
+	String patente;
 
 	@BeforeEach
 	public void setUp() {
@@ -28,28 +33,74 @@ class PuntoDeVentaTest {
 		this.regis = mock(IRegistroCompras.class);
 		this.ctrlSal = mock(IControlSaldo.class);
 		this.punto = new PuntoDeVenta(ctrlSal,ctrlEst,regis);
-	} 
+		this.patente = "112233";
 
-	@Test
-	void cuandoQuierenComprarCreditoEnUnPuntoDeVentaSeCargaElSaldoYSeRegistraLaCompra() {
-		this.punto.comprarCredito("112233", 15d);
-		verify(regis).registrar( any(CompraSaldo.class));
-		verify(ctrlSal).cargarSaldo("112233", 15d);
+		when(ctrlEst.getHoraFin()).thenReturn(LocalTime.of(20, 0));
 	}
 
 	@Test
-	void cuandoQuierenComprarUnEstacionamientoEnUnPuntoDeVentaSeRegistraLaCompraYElEstacionamiento() {
-		when(ctrlEst.getHoraFin()).thenReturn(LocalTime.of(20, 0));
-		this.punto.comprarEstacionamiento("112233", 20);
-		verify(this.regis).registrar( any(CompraPuntual.class) );
+	void comprarCreditoEnviaLaCompraAlRegistroCompraYElSaldoAControlSaldo() {
+		this.punto.comprarCredito(this.patente, 15d);
+
+		verify(this.regis).registrar(any(CompraSaldo.class));
+		verify(this.ctrlSal).cargarSaldo(this.patente, 15d);
+	}
+
+	@Test
+	void comprarEstacionamientoDe3HorasALas14Y30PermiteEstacionarHastaLas17Y30() {
+		LocalTime horaActual = LocalTime.of(14, 30);
+		EstacionamientoPuntual estacionamiento;
+
+		try(MockedStatic<LocalTime> localTimeMock = Mockito.mockStatic(LocalTime.class, Mockito.CALLS_REAL_METHODS)) {
+
+			localTimeMock.when(LocalTime::now).thenReturn(horaActual);
+
+			estacionamiento = this.punto.comprarEstacionamiento(this.patente, 3);
+		}
+
+		verify(this.regis).registrar(any(CompraPuntual.class));
 		verify(this.ctrlEst).registrarEstacionamiento(any(EstacionamientoPuntual.class));
+
+		assertEquals(estacionamiento.getHoraInicio(), LocalTime.of(14, 30));
+		assertEquals(estacionamiento.getHoraFin(), LocalTime.of(17, 30));
 	}
-	
+
 	@Test
-	void cuandoQuiereComprarUnEstaionamientoPor20HsSoloDejaUnaCantidadExacta() {
-		when(ctrlEst.getHoraFin()).thenReturn(LocalTime.of(20, 0));
-		Integer respuestaEsperada = ctrlEst.getHoraFin().getHour() - LocalTime.now().getHour();
-		assertEquals(respuestaEsperada, this.punto.comprarEstacionamiento("112233", 20));
+	void comprarEstacionamientoDe10HorasALas19Y30PermiteEstacionarHastaLas20() {
+		LocalTime horaActual = LocalTime.of(19, 30);
+		EstacionamientoPuntual estacionamiento;
+
+		try(MockedStatic<LocalTime> localTimeMock = Mockito.mockStatic(LocalTime.class, Mockito.CALLS_REAL_METHODS)) {
+
+			localTimeMock.when(LocalTime::now).thenReturn(horaActual);
+
+			estacionamiento = this.punto.comprarEstacionamiento(this.patente, 10);
+		}
+
+		verify(this.regis).registrar(any(CompraPuntual.class));
+		verify(this.ctrlEst).registrarEstacionamiento(any(EstacionamientoPuntual.class));
+
+		assertEquals(estacionamiento.getHoraInicio(), LocalTime.of(19, 30));
+		assertEquals(estacionamiento.getHoraFin(), LocalTime.of(20, 0));
+	}
+
+	@Test
+	void comprarEstacionamientoDe6HorasALas15PermiteEstacionarHastaLas20() {
+		LocalTime horaActual = LocalTime.of(15, 0);
+		EstacionamientoPuntual estacionamiento;
+
+		try(MockedStatic<LocalTime> localTimeMock = Mockito.mockStatic(LocalTime.class, Mockito.CALLS_REAL_METHODS)) {
+
+			localTimeMock.when(LocalTime::now).thenReturn(horaActual);
+
+			estacionamiento = this.punto.comprarEstacionamiento(this.patente, 6);
+		}
+
+		verify(this.regis).registrar(any(CompraPuntual.class));
+		verify(this.ctrlEst).registrarEstacionamiento(any(EstacionamientoPuntual.class));
+
+		assertEquals(estacionamiento.getHoraInicio(), LocalTime.of(15, 0));
+		assertEquals(estacionamiento.getHoraFin(), LocalTime.of(20, 0));
 	}
 
 }
