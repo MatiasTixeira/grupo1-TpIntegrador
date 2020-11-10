@@ -32,7 +32,7 @@ public class EstacionamientoApp extends Estacionamiento {
 	@Override 
 	public void finalizar(IControlSaldo controlSaldo, Double precioPorHora) {
 		if(this.getEstaActivo()) {
-			this.setHoraFin(this.calcularHorarioMaximo());
+			this.setHoraFin(this.horarioMaximo());
 			Double costo = this.costo(precioPorHora);
 			controlSaldo.descontar(this.getNumeroCelular(), costo);
 			this.setEstaActivo(false);
@@ -40,7 +40,7 @@ public class EstacionamientoApp extends Estacionamiento {
 		
 	}
 
-	private LocalTime calcularHorarioMaximo() {
+	private LocalTime horarioMaximo() {
 		return LocalTime.now().isBefore(this.getHoraFin())
 				? LocalTime.now()
 				: this.getHoraFin();

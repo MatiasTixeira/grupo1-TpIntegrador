@@ -27,20 +27,24 @@ public class SectorDeSaldo implements ISectorSaldo {
 	}
 
 	public Double saldo(String numCelular) {
-		Double valorARetornar = 
-		this.getCreditoCelulares().containsKey(numCelular)
+		Double saldo = 
+				this.contieneAlCelular(numCelular)
 			? this.getCreditoCelulares().get(numCelular)
 			: 0;
-		return valorARetornar;
+		return saldo;
+	}
+
+	private boolean contieneAlCelular(String numCelular) {
+		return this.getCreditoCelulares().containsKey(numCelular);
 	}
 	
 	public void descontar(String numCelular, Double cantADescontar) {
-		Double valorCambiado = (this.getCreditoCelulares().get(numCelular)) - cantADescontar;
+		Double valorCambiado = (this.saldo(numCelular)) - cantADescontar;
 		cambiarSaldoA(numCelular, valorCambiado);
 	}
 	
 	public void cargarSaldo(String numCelular, Double saldoACargar) {
-		Double valorCambiado = (this.getCreditoCelulares().get(numCelular)) + saldoACargar;
+		Double valorCambiado = (this.saldo(numCelular)) + saldoACargar;
 		cambiarSaldoA(numCelular, valorCambiado);
 	}
 
@@ -51,7 +55,7 @@ public class SectorDeSaldo implements ISectorSaldo {
 	
 	public Boolean creditoSuficiente(Double cantDeHoras, String numCelular) {
 		Double costoTotal = cantDeHoras * 40;
-		Double valor = this.getCreditoCelulares().get(numCelular);
+		Double valor = this.saldo(numCelular);
 		return costoTotal < valor;
 	}
 }

@@ -29,7 +29,11 @@ public class PuntoDeVenta {
 
 	//metodos
 	public void comprarCredito(String num, Double monto) {
-		CompraSaldo compra = new CompraSaldo(this,monto,num, LocalDate.now(), LocalTime.now());
+		
+		LocalDate fechaActual = LocalDate.now();
+		LocalTime horaActual = LocalTime.now(); 
+		
+		CompraSaldo compra = new CompraSaldo(this,monto,num, fechaActual, horaActual);
 		this.getControlCom().registrar(compra);
 		this.getControlSal().cargarSaldo(num, monto);
 	}

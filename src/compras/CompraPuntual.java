@@ -14,7 +14,7 @@ public class CompraPuntual extends Compra {
 	}
 
 	public Integer getCantidadDeHoras() {
-		return cantidadDeHoras;
+		return this.cantidadDeHoras;
 	}
 
 	private void setCantidadDeHoras(Integer cantidadDeHoras) {

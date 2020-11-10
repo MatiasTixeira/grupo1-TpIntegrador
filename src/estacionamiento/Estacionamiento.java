@@ -53,9 +53,14 @@ public abstract class Estacionamiento {
 	}
 
 	public Boolean estaVigente() {
-		Boolean estaVigente = LocalTime.now().isBefore(this.getHoraFin()) 
-				&& this.getEstaActivo();
+		Boolean estaVigente = 
+				this.estaEnHorario()&& 
+				this.getEstaActivo();
 		return estaVigente ;
+	}
+
+	private boolean estaEnHorario() {
+		return LocalTime.now().isBefore(this.getHoraFin());
 	}
 	
 	public Boolean getEstaActivo() {
