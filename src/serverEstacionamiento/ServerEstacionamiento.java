@@ -68,7 +68,7 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 	@Override
 	public Respuesta iniciarEstacionamiento(String nroCelular, String patente) {
 		Respuesta res;
-		if (this.getControlSaldo().saldo(nroCelular) <= 0) {
+		if (this.noContieneSaldoSuficiente(nroCelular)) {
 			res = new RespuestaSinSaldo();
 		} else {
 			LocalTime horaInicio = LocalTime.now();
@@ -79,6 +79,10 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 			res = new RespuestaInicioEstacionamiento(horaInicio, horaFin);
 		}
 		return res;
+	}
+
+	private boolean noContieneSaldoSuficiente(String nroCelular) {
+		return this.getControlSaldo().saldo(nroCelular) <= 0;
 	}
 
 	@Override
@@ -116,8 +120,8 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 
 	@Override 
 	public Boolean estaEnHorario() {
-		return LocalTime.now().isBefore(this.horaFin())
-				&& LocalTime.now().isAfter(this.horaInicio());
+		return LocalTime.now().isBefore(this.horaFin()) && 
+			   LocalTime.now().isAfter(this.horaInicio());
 	}
 }
 
