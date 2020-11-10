@@ -8,11 +8,7 @@ import puntoDeVenta.PuntoDeVenta;
 
 public class ZonaDeEstacionamiento{
 	
-	//atributos 
-	private String inspector;
 	private UbicacionGeografica ubicacion;
-	private ArrayList<PuntoDeVenta> puntosDeVenta;
-	
 	
 	public ZonaDeEstacionamiento(String i,UbicacionGeografica u, ArrayList<PuntoDeVenta> puntosDeVenta) {
 		this.setInspector(i);
@@ -21,11 +17,9 @@ public class ZonaDeEstacionamiento{
 	}
 
 	public void setPuntosDeVenta(ArrayList<PuntoDeVenta> puntosDeVenta) {
-		this.puntosDeVenta = puntosDeVenta;
 	}
 
 	private void setInspector(String inspector) {
-		this.inspector = inspector;
 	}
 
 	private void setUbicacion(UbicacionGeografica ubicacion) {

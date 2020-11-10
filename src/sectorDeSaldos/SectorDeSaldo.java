@@ -36,16 +36,19 @@ public class SectorDeSaldo implements ISectorSaldo {
 	
 	public void descontar(String numCelular, Double cantADescontar) {
 		Double valorCambiado = (this.getCreditoCelulares().get(numCelular)) - cantADescontar;
-		this.getCreditoCelulares().remove(numCelular);
-		this.getCreditoCelulares().put(numCelular, valorCambiado);
+		cambiarSaldoA(numCelular, valorCambiado);
 	}
 	
 	public void cargarSaldo(String numCelular, Double saldoACargar) {
 		Double valorCambiado = (this.getCreditoCelulares().get(numCelular)) + saldoACargar;
+		cambiarSaldoA(numCelular, valorCambiado);
+	}
+
+	private void cambiarSaldoA(String numCelular, Double valorCambiado) {
 		this.getCreditoCelulares().remove(numCelular);
 		this.getCreditoCelulares().put(numCelular, valorCambiado);
 	}
-
+	
 	public Boolean creditoSuficiente(Double cantDeHoras, String numCelular) {
 		Double costoTotal = cantDeHoras * 40;
 		Double valor = this.getCreditoCelulares().get(numCelular);
