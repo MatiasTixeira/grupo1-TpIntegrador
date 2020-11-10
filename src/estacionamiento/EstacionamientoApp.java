@@ -53,9 +53,9 @@ public class EstacionamientoApp extends Estacionamiento {
 		Double precioPorSegundo = precioPorHora / 3600;
 		Double costo = segundosCobrados * precioPorSegundo;
 		return costo;
-	}
+	} 
 	public Integer cantidadDeHoras() {
-		return Math.min(1, (this.getHoraFin().getHour() - this.getHoraInicio().getHour()));
+		return Math.max(1, (this.getHoraFin().getHour() - this.getHoraInicio().getHour()));
 	}
 	
 }
