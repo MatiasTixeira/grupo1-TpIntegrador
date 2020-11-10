@@ -1,6 +1,7 @@
 package serverDeEstacionamiento;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -140,16 +141,43 @@ class ServerDeEstacionamientoTest {
 
 	@Test
 	void getHoraFinSeComunicaConControlEstacionamientos() {
-		server.getHoraFin();
+		server.horaFin();
 
 		verify(this.controlEstacionamiento).getHoraFin();
 	}
 
 	@Test
 	void getHoraInicioSeComunicaConControlEstacionamientos() {
-		server.getHoraInicio();
+		server.horaInicio();
 
 		verify(this.controlEstacionamiento).getHoraInicio();
 	}
+	@Test
+	void elServerEstaEnHorarioSiSuHoraActualEstaDentroDeLaFranja() {
+		LocalTime las7hs45m = LocalTime.of(7, 45);
+		LocalTime las15hs20m = LocalTime.of(15, 20);
+		LocalTime las21hs55m = LocalTime.of(21, 55);
+		when(this.controlEstacionamiento.getHoraInicio()).thenReturn(
+											LocalTime.of(8,0),
+											LocalTime.of(8,0),
+											LocalTime.of(8,0));
+		when(this.controlEstacionamiento.getHoraFin()).thenReturn(
+											LocalTime.of(20,0),
+											LocalTime.of(20,0),
+											LocalTime.of(20,0));
+		
+		try(MockedStatic<LocalTime> localTimeMock = Mockito.mockStatic(LocalTime.class, Mockito.CALLS_REAL_METHODS)) {
 
+			localTimeMock.when(LocalTime::now).thenReturn(
+							las7hs45m,las7hs45m,
+							las15hs20m,las15hs20m,
+							las21hs55m,las21hs55m);
+
+			assertFalse(this.server.estaEnHorario());
+			assertTrue(this.server.estaEnHorario());
+			assertFalse(this.server.estaEnHorario());
+		
+		}
+
+	}
 }

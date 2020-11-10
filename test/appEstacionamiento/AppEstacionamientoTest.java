@@ -3,7 +3,6 @@ package appEstacionamiento;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.time.LocalTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,11 +13,9 @@ import appEstacionamiento.modoDeAlerta.ModoDeAlerta;
 import espacioGeografico.GPS;
 import espacioGeografico.Ubicacion;
 import respuestas.Respuesta;
-import sectorDeEstacionamiento.IControlDeEstacionamiento;
-import sectorDeSaldos.IControlSaldo;
-import sectorDeZonas.IControlZonas;
+import respuestas.RespuestaOperacionFallida;
 import serverEstacionamiento.IServerEstacionamientoApp;
-import serverEstacionamiento.ServerEstacionamiento;
+
 
 class AppEstacionamientoTest {
 	private AppEstacionamiento appE;
@@ -92,13 +89,42 @@ class AppEstacionamientoTest {
 		assertNotEquals(ubicacionInicial, appE.getUltimaUbicacionEst());
 	}
 	
-	//------------------
+	@Test
+	void iniciarEstacionamientoPideUnaRespuestaYLaImprimeEnElGUI() {
+		when(server.tieneEstacionamientoVigente(patente)).thenReturn(false);
+		when(server.estaEnZonaDeEstacionamiento(ubicacionInicial)).thenReturn(true);
+		when(server.estaEnHorario()).thenReturn(true);
+		when(server.iniciarEstacionamiento(nroCelular, patente)).thenReturn(res);
+		when(res.respuestaComoString()).thenReturn("Fue exitosa");
+		
+		appE.iniciarEstacionamiento();
+		
+		verify(this.gui).print("Fue exitosa");
+	}
 	
-	
+	@Test
+	void finalizarEstacionamientoPideUnaRespuestaYLaImprimeEnElGUI() {
+		Respuesta respuesta = mock(Respuesta.class);
+				
+			when(respuesta.respuestaComoString()).thenReturn("Fue exitosa");
+			when(server.finalizarEstacionamiento(nroCelular))
+					.thenReturn(respuesta);
+			when(server.tieneEstacionamientoVigente(patente)).thenReturn(false,true);
+			when(server.estaEnZonaDeEstacionamiento(ubicacionInicial)).thenReturn(true);
+			when(server.estaEnHorario()).thenReturn(true);
+			when(server.iniciarEstacionamiento(nroCelular, patente)).thenReturn(res);
+			when(res.operacionExitosa()).thenReturn(true);
+			appE.respuestaInicio();
+			
+			appE.finalizarEstacionamiento();
+			
+			verify(this.gui).print("Fue exitosa");
+	}
 	
 	
 	@Test
 	void respuestaFinCuandoPuedeFinzalizarUnEstacionamientoLeAvisaAlServerQueFinaliza() {
+
 		Respuesta respuesta = mock(Respuesta.class);
 		
 		when(respuesta.respuestaComoString()).thenReturn("Fue exitosa");
@@ -115,36 +141,54 @@ class AppEstacionamientoTest {
 		verify(appE.getServer()).finalizarEstacionamiento(appE.getNroCelular());
 		}
 	
-	// falta hacerlo
-	@Test
-	void respuestaFinCuandoNoPuedeFinzalizarUnEstacionamientoLeAvisaAlServerQueFinaliza() {
-		Respuesta respuesta = mock(Respuesta.class);
+	@Test 
+	void comenzoACaminarLeAvisaAlModoDeAlertaYAlModoDeActivacionQueComenzoACaminar() {
 		
-		when(respuesta.respuestaComoString()).thenReturn("Fue exitosa");
-		when(server.finalizarEstacionamiento(nroCelular))
-			.thenReturn(respuesta);
-		when(server.tieneEstacionamientoVigente(patente)).thenReturn(false,true);
-		when(server.estaEnZonaDeEstacionamiento(ubicacionInicial)).thenReturn(true);
-		when(server.estaEnHorario()).thenReturn(true);
-		when(server.iniciarEstacionamiento(nroCelular, patente)).thenReturn(res);
-		when(res.operacionExitosa()).thenReturn(true);
-		appE.respuestaInicio();
-		appE.respuestaFin();
+		appE.comenzoACaminar();
 		
-		verify(appE.getServer()).finalizarEstacionamiento(appE.getNroCelular());
-		}
+		verify(this.modoDeAlerta).comenzoACaminar(this.appE, this.gui);
+		verify(this.modoDeActivacion).comenzoACaminar(this.appE, this.gui);
+	}
 	
 	@Test
-	void cuandoLeLlegaElMensajeDrivingSeLoEnviaASuEstadoDeMovimientoActual() {	
+	void comenzoAManejarLeAvisaAlModoDeAlertaYAlModoDeActivacionQueComenzoAManejar() {
+
+		
+		appE.comenzoAManejar();
+		
+		verify(this.modoDeAlerta).comenzoAManejar(this.appE, this.gui);
+		verify(this.modoDeActivacion).comenzoAManejar(this.appE, this.gui);
+	}
+	
+	
+	@Test
+	void respuestaFinCuandoNoPuedeFinzalizarUnEstacionamientoLeEnviaAlGuiElStringDeLaRespuestaFallida() {
+		
+		when(server.tieneEstacionamientoVigente(patente)).thenReturn(false);
+		
+		Respuesta respuestaEsperada =  appE.respuestaFin();
+		String respuestaFallidaString = new RespuestaOperacionFallida().respuestaComoString();
+		
+		assertEquals(respuestaFallidaString, respuestaEsperada.respuestaComoString());
+
+	}
+	@Test
+	void cuandoLeLlegaElMensajeDrivingSeLoEnviaASuEstadoDeMovimientoActual() {
+	
 		appE.driving();
 		verify(estadoDeMovimiento).isDriving();
 	}
-		
+	
 	@Test
 	void cuandoLeLlegaElMensajeWalkinSeLoEnviaASuEstadoDeMovimientoActual() {	
+
 		appE.walking();	
 		verify(estadoDeMovimiento).isWalking();	
 	}
 	
+	@Test
+	void cuandoPuedeIniciarEstacionamiento() {
+		
+	}
 	
 }

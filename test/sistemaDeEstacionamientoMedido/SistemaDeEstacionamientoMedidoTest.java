@@ -2,6 +2,8 @@ package sistemaDeEstacionamientoMedido;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 
 import java.time.LocalTime;
 
@@ -43,8 +45,7 @@ class SistemaDeEstacionamientoMedidoTest {
 				gestorSuscripcion);
 	}
 	
-	
-	
+
 	@Test
 	void testConstructor() {
 		
@@ -63,4 +64,25 @@ class SistemaDeEstacionamientoMedidoTest {
 		assertEquals(gestorSuscripcion,sem.getSectorSuscripcion());
 	}
 
+	@Test
+	void cuandoElSemCambiaSuHoraDeFinLeAvisaAlSectorDeCompra() {
+		
+		sem.setHoraFin(LocalTime.of(6,30));
+		
+		verify(this.sectorEstacionamiento).setHoraFin(LocalTime.of(6,30));
+	}
+	@Test
+	void cuandoElSemCambiaSuHoraDeInicioLeAvisaAlSectorDeCompra() {
+		
+		sem.setHoraInicio(LocalTime.of(6,30));
+		
+		verify(this.sectorEstacionamiento).setHoraInicio(LocalTime.of(6,30));
+	}
+	@Test
+	void cuandoElSemCambiaSuPrecioPorHoraLeAvisaAlSectorDeCompra() {
+		
+		sem.setPrecioPorHora(100d); 
+		
+		verify(this.sectorEstacionamiento).setPrecioPorHora(100d);
+	}
 }

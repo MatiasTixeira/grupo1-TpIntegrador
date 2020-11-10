@@ -15,9 +15,9 @@ public interface IServerEstacionamientoApp {
 
 	public Boolean tieneEstacionamientoVigente(String patente);
 
-	public LocalTime getHoraFin();
+	public LocalTime horaFin();
 
-	public LocalTime getHoraInicio();
+	public LocalTime horaInicio();
 
 	public Boolean estaEnHorario();
 

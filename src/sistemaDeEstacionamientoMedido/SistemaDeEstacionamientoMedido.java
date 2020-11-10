@@ -28,15 +28,16 @@ public class SistemaDeEstacionamientoMedido {
 				ISectorDeCompras sectorCompra, ISectorDeInfracciones sectorInfraccion,
 				IGestorDeSuscripcion sectorSuscripcion) {
 			super();
-			this.setHoraInicio(horaInicio);
-			this.setHoraFin(horaFin);
-			this.setPrecioPorHora(precioPorHora);
+			
 			this.setSectorEstacionamiento(sectorEstacionamiento);
 			this.setSectorSsaldol(sectorSaldo);
 			this.setSectorZona(sectorZona);
 			this.setSectorCompra(sectorCompra);
 			this.setSectorInfraccion(sectorInfraccion);
 			this.setSectorSuscripcion(sectorSuscripcion);
+			this.setHoraInicio(horaInicio);
+			this.setHoraFin(horaFin);
+			this.setPrecioPorHora(precioPorHora);
 		}
 		
 		public LocalTime getHoraInicio() {
@@ -44,18 +45,21 @@ public class SistemaDeEstacionamientoMedido {
 		}
 		public void setHoraInicio(LocalTime horaInicio) {
 			this.horaInicio = horaInicio;
+			this.getSectorEstacionamiento().setHoraInicio(horaInicio);
 		}
 		public LocalTime getHoraFin() {
 			return horaFin;
 		}
 		public void setHoraFin(LocalTime horaFin) {
 			this.horaFin = horaFin;
+			this.getSectorEstacionamiento().setHoraFin(horaFin);
 		}
 		public Double getPrecioPorHora() {
 			return precioPorHora;
 		}
 		public void setPrecioPorHora(Double precioPorHora) {
 			this.precioPorHora = precioPorHora;
+			this.getSectorEstacionamiento().setPrecioPorHora(precioPorHora);
 		}
 		public ISectorDeEstacionamiento getSectorEstacionamiento() {
 			return sectorEstacionamiento;
@@ -65,7 +69,7 @@ public class SistemaDeEstacionamientoMedido {
 		}
 		public ISectorSaldo getSectorSaldo() {
 			return sectorSaldo;
-		}
+		} 
 		public void setSectorSsaldol(ISectorSaldo sectorSsaldol) {
 			this.sectorSaldo = sectorSsaldol;
 		}
