@@ -11,14 +11,26 @@ public abstract class Compra {
 	private PuntoDeVenta puntoDeVenta;
 	private Integer numeroDeControl;
 
-	public Compra(PuntoDeVenta puntoDeVenta) {
-		this.setFecha(LocalDate.now());
-		this.setHora(LocalTime.now());
-		this.setPuntoDeVenta(puntoDeVenta);		
+	public Compra(PuntoDeVenta puntoDeVenta, LocalDate fecha, LocalTime hora) {
+		this.setFecha(fecha);
+		this.setHora(hora);
+		this.setPuntoDeVenta(puntoDeVenta);
 	}
 
 	private void setFecha(LocalDate fecha) {
 		this.fecha = fecha;
+	}
+
+	public LocalDate getFecha() {
+		return fecha;
+	}
+
+	public LocalTime getHora() {
+		return hora;
+	}
+
+	public PuntoDeVenta getPuntoDeVenta() {
+		return puntoDeVenta;
 	}
 
 	private void setHora(LocalTime hora) {
