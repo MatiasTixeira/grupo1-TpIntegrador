@@ -105,19 +105,19 @@ public class ServerEstacionamiento implements IServerEstacionamientoApp {
 	}
 
 	@Override
-	public LocalTime getHoraFin() {
+	public LocalTime horaFin() {
 		return this.getControlEstacionamiento().getHoraFin();
 	}
 
 	@Override
-	public LocalTime getHoraInicio() {
+	public LocalTime horaInicio() {
 		return this.getControlEstacionamiento().getHoraInicio();
 	}
 
 	@Override 
 	public Boolean estaEnHorario() {
-		return LocalTime.now().isBefore(this.getHoraFin())
-				&& LocalTime.now().isAfter(this.getHoraInicio());
+		return LocalTime.now().isBefore(this.horaFin())
+				&& LocalTime.now().isAfter(this.horaInicio());
 	}
 }
 

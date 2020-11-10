@@ -1,6 +1,5 @@
 package appEstacionamiento;
 
-import java.time.LocalTime;
 
 import appEstacionamiento.estadoDeMoviemiento.EstadoDeMovimiento;
 import appEstacionamiento.modoDeActivacion.ModoDeActivacion;
@@ -158,7 +157,7 @@ public class AppEstacionamiento implements MovementSensor {
 	}
 
 	public void comenzoAManejar() {
-
+ 
 		this.getModoDeAlerta().comenzoAManejar(this, this.getGui());
 
 		this.getModoDeActivacion().comenzoAManejar(this, this.getGui());
