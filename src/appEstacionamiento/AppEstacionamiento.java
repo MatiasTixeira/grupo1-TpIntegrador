@@ -184,7 +184,7 @@ public class AppEstacionamiento implements MovementSensor {
 		return this.ubicacionActual().equals(this.getUltimaUbicacionEst());
 	}
 
-	public Boolean puedeIniciarEstacionamiento() {
+	public Boolean puedeIniciarEstacionamiento() { 
 		return this.estaEnZonaEstacionamiento()
 				&& !this.tieneEstacionamientoVigente()
 				&& this.estaEnHorario();

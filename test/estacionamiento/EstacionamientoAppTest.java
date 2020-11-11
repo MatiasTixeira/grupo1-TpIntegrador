@@ -24,9 +24,13 @@ class EstacionamientoAppTest {
 		
 		estacionamiento = 
 				new EstacionamientoApp("AAA-111",LocalTime.of(10, 0),LocalTime.of(20, 0),"03-03-456");
+	LocalTime las16Horas = LocalTime.of(16, 0);
+	try(MockedStatic<LocalTime> localTimeMock = Mockito.mockStatic(LocalTime.class, Mockito.CALLS_REAL_METHODS)) {
 		
-	assertTrue(estacionamiento.esSuPatente("AAA-111"));
-	assertTrue(estacionamiento.estaVigente()); 
+		localTimeMock.when(LocalTime::now).thenReturn(las16Horas);
+		assertTrue(estacionamiento.estaVigente());
+	}	
+	assertTrue(estacionamiento.esSuPatente("AAA-111")); 
 	assertEquals(LocalTime.of(10,0).getHour(), estacionamiento.getHoraInicio().getHour());
 	assertEquals(LocalTime.of(20, 0).getHour(), estacionamiento.getHoraFin().getHour());
 	assertTrue(estacionamiento.esSuCelular("03-03-456"));
@@ -39,12 +43,17 @@ class EstacionamientoAppTest {
 		IControlSaldo controlSaldo = mock(IControlSaldo.class);
 		estacionamiento = 
 				new EstacionamientoApp("AAA-111",LocalTime.of(10, 0),LocalTime.of(20, 0),"03-03-456");
+		LocalTime las16Horas = LocalTime.of(16, 0);
 		
-		estacionamiento.finalizar(controlSaldo,40d);
-		verify(controlSaldo).descontar(estacionamiento.getNumeroCelular(), estacionamiento.costo(40d));
-		
-		assertFalse(estacionamiento.estaVigente());
-		assertEquals(LocalTime.now().getHour(), estacionamiento.getHoraFin().getHour());
+		try(MockedStatic<LocalTime> localTimeMock = Mockito.mockStatic(LocalTime.class, Mockito.CALLS_REAL_METHODS)) {
+					
+					localTimeMock.when(LocalTime::now).thenReturn(las16Horas);
+					estacionamiento.finalizar(controlSaldo,40d);
+					verify(controlSaldo).descontar(estacionamiento.getNumeroCelular(), estacionamiento.costo(40d));
+					assertFalse(estacionamiento.estaVigente());
+					assertEquals(LocalTime.now().getHour(), estacionamiento.getHoraFin().getHour());
+					
+		}	
 		
 	}
 	@Test

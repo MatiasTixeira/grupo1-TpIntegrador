@@ -59,7 +59,7 @@ public abstract class Estacionamiento {
 		return estaVigente ;
 	}
 
-	private boolean estaEnHorario() {
+	public boolean estaEnHorario() {
 		return LocalTime.now().isBefore(this.getHoraFin());
 	}
 	

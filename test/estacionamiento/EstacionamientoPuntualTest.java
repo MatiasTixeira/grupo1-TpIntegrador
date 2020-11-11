@@ -27,13 +27,18 @@ class EstacionamientoPuntualTest {
 		compra = mock(CompraPuntual.class);
 		estacionamiento = 
 				new EstacionamientoPuntual("AAA-111",LocalTime.of(10, 0),LocalTime.of(20, 0),compra);
+	LocalTime las16Horas = LocalTime.of(16, 0);
+	try(MockedStatic<LocalTime> localTimeMock = Mockito.mockStatic(LocalTime.class, Mockito.CALLS_REAL_METHODS)) {
 		
-	assertTrue(estacionamiento.esSuPatente("AAA-111"));
-	assertTrue(estacionamiento.estaVigente()); 
+		localTimeMock.when(LocalTime::now).thenReturn(las16Horas);
+		assertTrue(estacionamiento.estaVigente()); 
+
+	}
 	assertEquals(LocalTime.of(10,0), estacionamiento.getHoraInicio());
 	assertEquals(LocalTime.of(20, 0), estacionamiento.getHoraFin());
 	assertFalse(estacionamiento.esSuCelular("03-03-456"));
 	assertEquals(compra, estacionamiento.getCompra());
+	assertTrue(estacionamiento.esSuPatente("AAA-111"));
 		
 	}
 	@Test
@@ -67,7 +72,12 @@ class EstacionamientoPuntualTest {
 		IControlSaldo controlSaldo = mock(IControlSaldo.class) ;
 		estacionamiento = 
 				new EstacionamientoPuntual("AAA-111",LocalTime.of(10, 0),LocalTime.of(20, 0),compra);
-		assertTrue(estacionamiento.estaVigente());
+		LocalTime las16Horas = LocalTime.of(16, 0);
+		try(MockedStatic<LocalTime> localTimeMock = Mockito.mockStatic(LocalTime.class, Mockito.CALLS_REAL_METHODS)) {
+			
+			localTimeMock.when(LocalTime::now).thenReturn(las16Horas);
+			assertTrue(estacionamiento.estaVigente());
+		}
 		estacionamiento.finalizar(controlSaldo, 40d );
 		assertFalse(estacionamiento.estaVigente());
 		verifyNoMoreInteractions(controlSaldo);

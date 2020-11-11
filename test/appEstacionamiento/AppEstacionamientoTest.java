@@ -162,14 +162,56 @@ class AppEstacionamientoTest {
 	
 	
 	@Test
-	void respuestaFinCuandoNoPuedeFinzalizarUnEstacionamientoLeEnviaAlGuiElStringDeLaRespuestaFallida() {
+	void respuestaFinCuandoNoPuedeFinzalizarUnEstacionamientoPorLaZonaLeEnviaAlGuiElStringDeLaRespuestaFallida() {
 		
 		when(server.tieneEstacionamientoVigente(patente)).thenReturn(false);
+		when(server.estaEnHorario()).thenReturn(false);
+		when(server.estaEnZonaDeEstacionamiento(any(Ubicacion.class))).thenReturn(false);
 		
 		Respuesta respuestaEsperada =  appE.respuestaFin();
 		String respuestaFallidaString = new RespuestaOperacionFallida().respuestaComoString();
 		
 		assertEquals(respuestaFallidaString, respuestaEsperada.respuestaComoString());
+
+	}
+	@Test
+	void noPuedeIniciarEstacionamientoSiNoEstaEnHorario() {
+		
+		when(server.estaEnHorario()).thenReturn(false);
+		when(server.tieneEstacionamientoVigente(patente)).thenReturn(false);
+		when(server.estaEnZonaDeEstacionamiento(any(Ubicacion.class))).thenReturn(true);
+		
+		assertFalse(appE.puedeIniciarEstacionamiento());
+
+	}
+	@Test
+	void noPuedeIniciarEstacionamientoSiDisponeYaDeUnEstacionamiento() {
+		
+		when(server.estaEnHorario()).thenReturn(true);
+		when(server.tieneEstacionamientoVigente(patente)).thenReturn(true);
+		when(server.estaEnZonaDeEstacionamiento(any(Ubicacion.class))).thenReturn(true);
+		
+		assertFalse(appE.puedeIniciarEstacionamiento());
+
+	}
+	@Test
+	void noPuedeIniciarEstacionamientoSiNoEstaEnZonaDeEstacionamiento() {
+		
+		when(server.estaEnHorario()).thenReturn(true);
+		when(server.tieneEstacionamientoVigente(patente)).thenReturn(false);
+		when(server.estaEnZonaDeEstacionamiento(any(Ubicacion.class))).thenReturn(false);
+		
+		assertFalse(appE.puedeIniciarEstacionamiento());
+
+	}
+	@Test
+	void cuandoPuedeIniciarEstacionamiento() {
+		
+		when(server.estaEnHorario()).thenReturn(true);
+		when(server.tieneEstacionamientoVigente(patente)).thenReturn(false);
+		when(server.estaEnZonaDeEstacionamiento(any(Ubicacion.class))).thenReturn(true);
+		
+		assertTrue(appE.puedeIniciarEstacionamiento());
 
 	}
 	@Test
@@ -185,10 +227,30 @@ class AppEstacionamientoTest {
 		appE.walking();	
 		verify(estadoDeMovimiento).isWalking();	
 	}
+	@Test
+	void noPuedeFinalizarEstacionamientoSiNoTieneUnEstacionamientoVigente() {
+		
+		when(this.gps.ubicacionActual()).thenReturn(this.ubicacionInicial);
+		when(server.estaEnHorario()).thenReturn(true);
+		when(server.tieneEstacionamientoVigente(patente)).thenReturn(false);
+		when(server.estaEnZonaDeEstacionamiento(any(Ubicacion.class))).thenReturn(true);
+		appE.setUltimaUbicacionEst(ubicacionInicial);
+		
+		assertFalse(appE.puedeFinalizarEstacionamiento());
+
+	}
 	
 	@Test
-	void cuandoPuedeIniciarEstacionamiento() {
+	void noPuedeFinalizarEstacionamientoSiNoEstaEnHorario() {
 		
+		when(this.gps.ubicacionActual()).thenReturn(this.ubicacionInicial);
+		when(server.estaEnHorario()).thenReturn(false);
+		when(server.tieneEstacionamientoVigente(patente)).thenReturn(true);
+		when(server.estaEnZonaDeEstacionamiento(any(Ubicacion.class))).thenReturn(true);
+		appE.setUltimaUbicacionEst(ubicacionInicial);
+		
+		assertFalse(appE.puedeFinalizarEstacionamiento());
+
 	}
 	
 }
