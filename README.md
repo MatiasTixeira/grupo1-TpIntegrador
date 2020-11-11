@@ -1,5 +1,7 @@
 *Universidad Nacional de Quilmes*
+
 *Tecnicatura en Programación Informática*
+
 *Programación con Objetos II - Año 2020*
 
 # Programación con Objetos II
