@@ -14,6 +14,12 @@
 * Matias Tixeira - `matiastixeira.3240@gmail.com`
 * Juan Francisco Perez - `juanf.perez.97@gmail.com`
 
+### Links
+
+* Uml imagen: https://github.com/MatiasTixeira/grupo1-TpIntegrador/blob/master/UmlSEM-Cortave-Tixeira-Perez.png
+* Uml drawio: https://github.com/MatiasTixeira/grupo1-TpIntegrador/blob/master/UmlSEM-Cortave-Tixeira-Perez.drawio
+* Mockito: https://github.com/MatiasTixeira/grupo1-TpIntegrador/blob/master/mockito-3.6.0.rar
+* Proyecto: https://github.com/MatiasTixeira/grupo1-TpIntegrador
 ### Diseño
 
 ##### El Sistema De Estacionamiento Medido
